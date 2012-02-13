@@ -1,0 +1,4 @@
+* 실행 전
+
+1. > npm update 
+	socket.io, mime 등 의존모듈 설치를 위해 npm update 명령어를 실행!
