@@ -1,0 +1,8 @@
+{
+  "name": "dalmutionline",
+  "version": "0.0.1",
+  "dependencies": {
+    "mime": "1.2.4",
+    "socket.io": "0.8.7"
+  }
+}
