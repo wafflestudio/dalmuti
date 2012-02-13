@@ -1,0 +1,202 @@
+html, body, div, span, applet, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre,a, abbr, acronym, address, big, cite, code,del, dfn, em, img, ins, kbd, q, s, samp,small, strike, strong, sub, sup, tt, var,b, u, i, center,dl, dt, dd, ol, ul, li,fieldset, form, label, legend,table, caption, tbody, tfoot, thead, tr, th, td,article, aside, canvas, details, embed,figure, figcaption, footer, header, hgroup,menu, nav, output, ruby, section, summary,time, mark, audio, video {margin: 0;padding: 0;border: 0;font-size: 100%;font: inherit;vertical-align: baseline;}
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {display: block;}
+body {line-height: 1;font-family:"Arial";font-size:10pt;}
+ol, ul {list-style: none;}
+blockquote, q {quotes: none;}
+blockquote:before, blockquote:after,q:before, q:after {content: '';content: none;}
+table {border-collapse: collapse;border-spacing: 0;}
+
+html {background-image:url("/images/darkgray.jpg");}
+#top_wrapper {width:800px;height:640px;margin:auto;margin-top:10px;}
+#wrapper {width:800px;height:600px;margin:auto;background-color:white;}
+#footer {height:40px;color:white;font-size:12pt;font-weight:normal;padding:10px;text-align:center;line-height:160%;}
+#footer a:visited {color:#c53535;text-decoration:none;}
+#footer a:link {color:#c53535;text-decoration:none;}
+#footer a:hover {color:#c53535;text-decoration:none;}
+
+.no-title .ui-dialog-titlebar {display:none;}
+#modal_loading {text-align:center;padding:30px;}
+#modal_loading .loading-text {margin-top:10px;}
+#modal_error {text-align:center;padding:30px;}
+#modal_error .error-message-div {margin-top:10px;margin-bottom:10px;}
+#modal_alert {text-align:center;padding:30px;}
+#modal_alert .alert-message {margin-top:10px;margin-bottom:10px;font-size:13pt;}
+
+#entrance_wrapper {width:800px;height:600px;position:absolute;}
+#lobby_wrapper {width:800px;height:600px;position:absolute;}
+#room_wrapper {width:800px;height:600px;position:absolute;background-image:url("/images/room_bg.jpg");}
+
+#entrance {padding:20px;text-align:center;padding-top:200px;}
+#entrance h1 {font-size:30pt;margin-bottom:20px;}
+#entrance .ui-widget {font-size:13pt !important;}
+#entrance .input-text {width: 250px;height:28px;font-size:20px;border:1px dotted #666;color : #747862;padding:4px 8px;margin-bottom:0px;}
+#entrance_connecting_users_count {margin-top:20px;font-size:14pt;}
+
+#lobby_wrapper #room_buttons .ui-widget {font-size:15pt !important;}
+#lobby_top #lobby_rooms {border:1px dotted black;width:600px;height:400px;float:left;overflow:hidden;}
+#lobby_top #room_buttons {width:100%;height:50px;}
+#lobby_top #room_list {height:350px;}
+#lobby_top #room_list .ui-widget {font-size:12pt !important;}
+#lobby_top #room_list_table {width:575px;margin-left:5px;}
+#lobby_top #room_list_table .room-no{width:40px;text-align:center;}
+#lobby_top #room_list_table .room-enter{width:80px;}
+#lobby_top #room_list_table .room-title{padding-left:10px;}
+#lobby_top #room_list_table .room-players{width:60px;text-align:center;}
+#lobby_top #room_list_table .room-master{width:60px;text-align:center;}
+#lobby_top #room_list_table .room-state{width:60px;text-align:center;}
+#lobby_top #room_list_table th {
+	border-top:1px solid #ddd;
+	padding:10px;font-weight:normal;background-color:#eee;font-size:11pt;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	background-image:-webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#e3e3e3), color-stop(.6,#B3B3B3));
+	background-image: -moz-linear-gradient(top, #D6D6D6, #B0B0B0, #B3B3B3 90%);
+}
+#lobby_top #room_list_table td {padding:5px;border-bottom:1px solid #ddd;font-size:11pt;}
+#lobby_users {border:1px dotted black;width:190px;margin-left:605px;height:400px;}
+#lobby_users h3 {padding:8px;font-size;14pt;background-color:#333;color:white;font-weight:bold;}
+#lobby_users #user_list {}
+#user_list ul {font-size:12pt;list-style:circle;padding:5px;}
+#user_list li {margin-bottom:3px;padding:2px;}
+#user_list li.my-list {color:blue;}
+/* Tiny Scrollbar */
+#user_list .viewport { width:170px; height:370px; overflow: hidden; position: relative; }
+#user_list .overview { list-style: none; position: absolute; left: 0; top: 0; padding: 0; margin: 0; }
+#user_list .scrollbar{ background: transparent url("/images/bg-scrollbar-track-y.png") no-repeat 0 0; position: relative; background-position: 0 0; float: right; width: 15px; }
+#user_list .track { background: transparent url("/images/bg-scrollbar-trackend-y.png") no-repeat 0 100%; height: 100%; width:13px; position: relative; padding: 0 1px; }
+#user_list .thumb { background: transparent url("/images/bg-scrollbar-thumb-y.png") no-repeat 50% 100%; height: 20px; width: 25px; cursor: pointer; overflow: hidden; position: absolute; top: 0; left: -5px; }
+#user_list .thumb .end { background: transparent url("/images/bg-scrollbar-thumb-y.png") no-repeat 50% 0; overflow: hidden; height: 5px; width: 25px; }
+#user_list .disable { display: none; }
+/* Tiny Scrollbar end */
+
+/* Tiny Scrollbar */
+#lobby_top #room_list .viewport { width:580px; height:350px; overflow: hidden; position: relative; }
+#lobby_top #room_list .overview { list-style: none; position: absolute; left: 0; top: 0; padding: 0; margin: 0; }
+#lobby_top #room_list .scrollbar{ background: transparent url("/images/bg-scrollbar-track-y.png") no-repeat 0 0; position: relative; background-position: 0 0; float: right; width: 15px; }
+#lobby_top #room_list .track { background: transparent url("/images/bg-scrollbar-trackend-y.png") no-repeat 0 100%; height: 100%; width:13px; position: relative; padding: 0 1px; }
+#lobby_top #room_list .thumb { background: transparent url("/images/bg-scrollbar-thumb-y.png") no-repeat 50% 100%; height: 20px; width: 25px; cursor: pointer; overflow: hidden; position: absolute; top: 0; left: -5px; }
+#lobby_top #room_list .thumb .end { background: transparent url("/images/bg-scrollbar-thumb-y.png") no-repeat 50% 0; overflow: hidden; height: 5px; width: 25px; }
+#lobby_top #room_list .disable { display: none; }
+/* Tiny Scrollbar end */
+
+#dialog_create_room {padding:25px;}
+#create_room_table {width:350px;}
+#create_room_table th {padding:5px 10px 5px 10px;width:70px;}
+#create_room_table td {padding:5px 10px 5px 10px;}
+#create_room_table td .input-text {height:28px;font-size:20px;border:1px dotted #666;color:#747862;padding:4px 8px;margin-bottom:0px;width:220px;}
+
+#dialog_enter_password {padding:25px;}
+#enter_password_table {width:350px;}
+#enter_password_table th {padding:5px 10px 5px 10px;width:70px;}
+#enter_password_table td {padding:5px 10px 5px 10px;}
+#enter_password_table td .input-text {height:28px;font-size:20px;border:1px dotted #666;color:#747862;padding:4px 8px;margin-bottom:0px;width:220px;}
+
+#lobby_chat_message_list {height:160px;}
+/* Tiny Scrollbar */
+#lobby_chat_message_list .viewport { width:780px; height:160px; overflow: hidden; position: relative; }
+#lobby_chat_message_list .overview { list-style: none; position: absolute; left: 0; top: 0; padding: 0; margin: 0; }
+#lobby_chat_message_list .scrollbar{ background: transparent url("/images/bg-scrollbar-track-y.png") no-repeat 0 0; position: relative; background-position: 0 0; float: right; width: 15px; }
+#lobby_chat_message_list .track { background: transparent url("/images/bg-scrollbar-trackend-y.png") no-repeat 0 100%; height: 100%; width:13px; position: relative; padding: 0 1px; }
+#lobby_chat_message_list .thumb { background: transparent url("/images/bg-scrollbar-thumb-y.png") no-repeat 50% 100%; height: 20px; width: 25px; cursor: pointer; overflow: hidden; position: absolute; top: 0; left: -5px; }
+#lobby_chat_message_list .thumb .end { background: transparent url("/images/bg-scrollbar-thumb-y.png") no-repeat 50% 0; overflow: hidden; height: 5px; width: 25px; }
+#lobby_chat_message_list .disable { display: none; }
+/* Tiny Scrollbar end */
+
+#lobby_chat_message_input {height:40px;border-top:1px solid #ddd;}
+.lobby-chat {clear:both;width:780px;height:20px;font-size:10pt;}
+.lobby-chat .lobby-chat-nickname {float:left;padding:3px;background-color:#555;color:white;font-weight:bold;}
+.lobby-chat .lobby-chat-my-nickname {float:left;padding:3px;background-color:#9932cc;color:white;font-weight:bold;}
+.lobby-chat .lobby-chat-message {float:left;padding:3px;}
+.clear {clear:both;}
+#lobby_chat_form .input-text {width: 620px;height:20px;font-size:16px;border:1px dotted #666;color : #747862;padding:4px 8px;margin-bottom:0px;}
+
+#room_info {height:180px}
+
+/* Tiny Scrollbar */
+#room_chat {height:350px;background-color:white;}
+#room_chat_message_list {height:255px;}
+#room_chat_message_list .viewport { width:180px; height:255px; overflow: hidden; position: relative; }
+#room_chat_message_list .overview { list-style: none; position: absolute; left: 0; top: 0; padding: 0; margin: 0; }
+#room_chat_message_list .scrollbar{ background: transparent url("/images/bg-scrollbar-track-y.png") no-repeat 0 0; position: relative; background-position: 0 0; float: right; width: 15px; }
+#room_chat_message_list .track { background: transparent url("/images/bg-scrollbar-trackend-y.png") no-repeat 0 100%; height: 100%; width:13px; position: relative; padding: 0 1px; }
+#room_chat_message_list .thumb { background: transparent url("/images/bg-scrollbar-thumb-y.png") no-repeat 50% 100%; height: 20px; width: 25px; cursor: pointer; overflow: hidden; position: absolute; top: 0; left: -5px; }
+#room_chat_message_list .thumb .end { background: transparent url("/images/bg-scrollbar-thumb-y.png") no-repeat 50% 0; overflow: hidden; height: 5px; width: 25px; }
+#room_chat_message_list .disable { display: none; }
+/* Tiny Scrollbar end */
+/* room chat */
+#room_chat_message_input {height:40px;border-top:1px solid #ddd;}
+.room-chat {clear:both;width:180px;height:20px;font-size:10pt;}
+.room-chat .room-chat-nickname {float:left;padding:3px;background-color:#555;color:white;font-weight:bold;}
+.room-chat .room-chat-my-nickname {float:left;padding:3px;background-color:#9932cc;color:white;font-weight:bold;}
+.room-chat .room-chat-message {float:left;padding:3px;}
+.room-chat .room-info-message {float:left;padding:3px;color:gray;}
+#room_chat_form_div {text-align:center;}
+#room_chat_form .input-text {width: 180px;height:20px;font-size:10pt;border:1px dotted #666;color : #747862;padding:2px 4px;margin-bottom:0px;}
+/* room chat end */
+
+.absolute {position:absolute;}
+#room_top {width:600px;height:120px;position:relative;}
+#room_bottom {width:600px;height:120px;position:relative;top:480px;}
+#room_right {border:1px solid #333;background-color:white;width:200px;height:598px;position:relative;left:600px;}
+#room_right h3 {padding:8px;font-size;14pt;background-color:#333;color:white;font-weight:bold;}
+#room_wrapper .room-user {border:1px solid #333;width:118px;height:118px;float:left;color:white;}
+#room_wrapper .room-user .room-nickname {font-size:16pt;text-align:center;margin:25px 0 10px 0;}
+#room_wrapper .room-user .room-cards {font-size:16pt;text-align:center;}
+#room_wrapper .ok-user {background-color:#444;}
+#room_wrapper .no-user {background-color:#111;}
+#room_wrapper .my-user {background-color:#444;color:red;}
+#room_mycards_wrapper {position:relative;width:300px;height:290px;left:35px;top:155px;background-image:url("/images/room_card_set_bg.jpg");}
+#room_mycards {position:relative;width:260px;height:250px;left:20px;top:20px;z-index:100;}
+#room_table {position:relative;width:210px;height:290px;left:360px;top:155px;background-image:url("/images/room_card_table_bg.jpg");}
+.card-container {border:1px solid #ddd;position:absolute;}
+.card-container-deleted {border:1px solid #ddd;position:absolute;}
+.selected-card {border:1px solid red;}
+.selected-number-card {z-index:10000;}
+.nonselected-card {}
+.block-div {opacity:0.7;position:absolute;background-color:black;border:1px solid black;}
+.current-turn {/*background-color:#ffd700 !important;*/}
+.current-turn-complete {background-color:#ffd700 !important;}
+#room_table #previous_cards {position:relative;width:170px;height:180px;left:20px;top:20px;}
+#room_table #current_cards {position:relative;width:170px;height:180px;left:20px;top:50px;}
+#room_table #card_selection_buttons {position:relative;width:210px;height:40px;top:240px;text-align:center;}
+#room_table .previous-cards-wrapper {position:absolute;width:170px;height:180px;}
+.ui-dialog-titlebar-close {display:none;}
+
+#modal_leaderboard {z-index:99999;}
+#leaderboard_table {width:100%;}
+#leaderboard_table th {color:white;font-weight:bold;padding:8px;text-align:center;font-size:16pt;border-bottom:1px solid #777;}
+#leaderboard_table td {color:white;padding:8px;text-align:center;font-size:16pt;} #leaderboard_table .leaderboard-ranking {width:100px;}
+#leaderboard_table .leaderboard-nickname {}
+#leaderboard_table td.leaderboard-my-nickname {color:#ff3030;}
+#leaderboard_table td.leaderboard-my-ranking {color:#ff3030;}
+
+/* taxation */
+#taxation_wrapper_background {position:relative;width:598px;height:358px;top:120px;color:white;border:1px solid transparent;background-color:black;opacity:0.8;}
+#taxation_wrapper {position:relative;width:600px;height:360px;top:120px;color:white;border:1px solid transparent;}
+#taxation_wrapper h3 {margin-top:20px;font-size:32pt;text-align:center;}
+.taxation-card-set {position:absolute;}
+.selected-taxation-card {border:1px solid red;top:-30px;}
+#taxation_bottom {margin-top:230px;width:540px;position:relative;left:30px;height:40px;}
+#taxation_buttons {float:right;width:100px;height:40px;text-align:right;}
+#taxation_explain {float:left;width:410px;height:40px;font-size:13pt;line-height:130%;color:#ddd}
+#taxation_waiting {margin-left:30px;width:540px;margin-top:160px;text-align:center;font-size:20pt;color:#ddd}
+
+#room_timer_pcn {background-color:#666;height:50px;padding:8px;font-family:"Arial"}
+#room_timer {float:left;margin-left:10px;}
+#room_timer .timer-text {float:left;30px;background-color:black;color:red;font-weight:bold;font-size:30px;text-align:center;padding:10px;}
+#room_previous_cards_number {float:left;margin-left:10px;}
+#room_previous_cards_number .pcn-text {float:left;30px;background-color:black;color:#00ff00;font-weight:bold;font-size:30px;text-align:center;padding:10px;}
+
+.comment-div {font-size:16pt;position:relative;z-index:10001;text-align:center;color:#ffff00;}
+
+#modal_howtoplay {padding:15px;}
+.howtoplay {width:600px;height:320px;}
+.howtoplay h3 {font-size:20pt;margin-bottom:15px;font-weight:bold;}
+.howtoplay p {line-height:130%;font-size:12pt;text-indent:10px;margin-bottom:5px;}
+.howtoplay ul {list-style:circle;margin-bottom:10px;}
+.howtoplay li {margin-left:30px;line-height:130%;}
+.howtoplay-card {width:60px;height:90px;border:1px solid #999;}
+.howtoplay-card-blank {float:left;width:20px;height:90px;}
+.howtoplay-card-container {width:20px;height:30px;float:left;}
+.howtoplay-cards {height:150px;margin-bottom:20px;}
+.howtoplay-cards2 {height:90px;margin-bottom:20px;}
