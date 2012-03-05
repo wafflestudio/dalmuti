@@ -10,19 +10,56 @@ function refresh_room_list(rooms)
 		
 		$('<td></td>').addClass('room-no').appendTo(new_tr).text(room.number);
 		var title_td = $('<td></td>').addClass('room-title').appendTo(new_tr).text(room.title);
-		$('<td></td>').addClass('room-players').appendTo(new_tr).text(room.users.length + "/" + room.capacity);
+		var players_td = $('<td></td>').addClass('room-players').appendTo(new_tr).text(room.users.length + "/" + room.capacity);
 		$('<td></td>').addClass('room-master').appendTo(new_tr).text(room.master.nickname);
-		$('<td></td>').addClass('room-state').appendTo(new_tr).text(room.state);
+		var state_td = $('<td></td>').addClass('room-state').appendTo(new_tr);
+		$('<div></div>').addClass('room-state-text').text(room.state).appendTo(state_td);
 		var room_enter_td = $('<td></td>').addClass('room-enter').appendTo(new_tr);
 		var enter_button = $('<input type="button" value="enter" />').attr('alt', room.rid).addClass('room-enter-button').attr('number', room.number).appendTo(room_enter_td); 
+		//add player_list to players_td
+		var player_list_ul = $('<ul></ul>').addClass('room-player-list').appendTo(players_td).hide();
+		for (var j=0;j<room.users.length;j++){
+			var user = room.users[j];
+			$('<li></li>').addClass('room-player-container').text(user.nickname).appendTo(player_list_ul);
+		}
+		
+		//add lock image
 		if (room.is_secret){
 			$('<img src="/images/lock.png" />').css('margin-left', "5px").css('vertical-align', 'middle').appendTo(title_td);
 			enter_button.attr('is-secret', room.is_secret).attr('title', room.title);
 		}
+
+		//get room progress
+		state_td.hover(function(){
+			//mouseenter
+			socket.emit('get_room_progress', {rid:room.rid});
+		},function(){
+			//mouseleave
+			$('.room-state-text').show();
+			$('.room-progress').remove();
+		});
 	}
 	$('#room_list_table tbody').remove();
 	new_tbody.appendTo($('#room_list_table'));
 
+	//show/hide player_list
+	$('td.room-enter').unbind('mouseenter').mouseenter(function(){
+		//mouseenter
+		var ele = $(this);
+		var contextmenu_absolute = $('<div></div>').addClass('absolute').addClass('room-player-list-container').appendTo($('#wrapper'));
+		var contextmenu = $('<div></div>').addClass('room-player-list').appendTo(contextmenu_absolute).css('top', ele.position().top + $('#room_list').position().top + 7);
+		$('<h3></h3>').text("Players").appendTo(contextmenu);
+		var contextmenu_ul = $('<ul></ul>').appendTo(contextmenu);
+		var users_nickname = ele.parent().find('.room-player-list').children().map(function(i){ return $(this).text(); }).toArray();
+		for (var i=0;i<users_nickname.length;i++){
+			$('<li></li>').appendTo(contextmenu).text(users_nickname[i]);
+		}
+
+	}).unbind('mouseleave').mouseleave(function(){
+		$('.room-player-list-container').remove();
+	});
+
+	//when room enter button is clicked
 	$('.room-enter-button').click(function(){
 		var rid = $(this).attr('alt');
 		var number = $(this).attr('number');
@@ -105,6 +142,7 @@ $(function(){
 			var title = form_hash.title;
 			var is_secret = form_hash.is_secret;
 			var password = form_hash.password;
+			var allowing_observer = form_hash.allowing_observer;
 
 			if (title.trim() == ""){
 				alert("Enter a title");
@@ -119,7 +157,8 @@ $(function(){
 				uid : uid,
 				title : title,
 				is_secret : is_secret,
-				password : password
+				password : password,
+				allowing_observer: allowing_observer
 			});
 			$('#create_room_form input').attr('disabled', 'disabled');
 
@@ -223,4 +262,17 @@ $(function(){
 		container.appendTo($('#lobby_chat_message_list .overview'));
 		$('#lobby_chat_message_list').tinyscrollbar_update('bottom');
 	});
+
+	socket.on('get_room_progress_result', function(data){
+		var room_progress_div = $('<div></div>').addClass('room-progress').text(data.progress + " %");
+		$('#room_list_table tbody tr').each(function(i){
+			var ele = $(this);
+			var rid = ele.find('.room-enter-button').attr('alt');
+			if (rid == data.rid){
+				ele.find('.room-state-text').hide();
+				room_progress_div.appendTo(ele.find('.room-state'));
+			}
+		});
+	});
+
 });

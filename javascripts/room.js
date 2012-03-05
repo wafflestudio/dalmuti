@@ -1,5 +1,8 @@
 function refresh_room_users(users)
 {
+	console.log('BROADCAST USER INFO');
+	console.log(users);
+	$('.room-user-kick').hide();
 	$('.room-user').each(function(i){
 		var ele = $(this);
 		if (i < users.length){
@@ -10,12 +13,18 @@ function refresh_room_users(users)
 				ele.addClass('ok-user');
 			ele.children('.room-nickname').text(users[i].nickname);
 			ele.children('.room-cards').text("");
+			ele.children('.room-user-uid').text(users[i].uid);
+			if (users[0].uid == uid && uid != users[i].uid && room_state == 0)
+				ele.children('.room-user-kick').show();
+			//ele.enableContextMenu(); //context menu
 		}
 		else {
 			ele.removeClass('ok-user').removeClass('my-user');
 			ele.addClass('no-user');
 			ele.children('.room-nickname').text("");
 			ele.children('.room-cards').text("");
+			ele.children('.room-user-uid').text("");
+			//ele.disableContextMenu(); //context menu
 		}
 	});
 }
@@ -660,6 +669,28 @@ $(function(){
 		});
 	});
 
+	//revolution
+	$('#taxation_revolution_button').click(function(){
+		socket.emit('revolution', {
+			uid:uid
+		});
+	});
+
+	//kicking
+	$('.room-user-kick').click(function(){
+		var ele = $(this);
+		var kick_uid = ele.parent().children('.room-user-uid').text();
+		socket.emit('kick_user', {rid:where, uid:uid, kick_uid:kick_uid});
+	});
+
+	//context menu
+	/*
+	$('.room-user').contextMenu({
+		menu:"myMenu"
+	}, function(action, el, pos){
+	});
+	*/
+
 	//room chat message
 	socket.on('room_chat_message', function(data){
 		var nickname = data.nickname;
@@ -705,6 +736,7 @@ $(function(){
 		room_timer = null;
 		room_timer_seconds = 0;
 		refresh_room_timer_seconds(); //init timer
+		$('#room_turn_master').text(""); //init turn_master_nickname
 
 		cards = {};
 		players = [];
@@ -722,6 +754,8 @@ $(function(){
 
 	//room user info
 	socket.on('room_user_info', function(data){
+		console.log('room_user_info');
+		console.log(data);
 		refresh_room_users(data);
 	});
 
@@ -730,6 +764,7 @@ $(function(){
 		players = data.users; //refresh players
 		cards = data.cards; //refresh cards info
 		room_state = data.state; //change state
+		$('.room-user-kick').hide(); //hide user-kick
 
 		console.log("START GAME COMPLETE");
 		console.log(data);
@@ -850,6 +885,7 @@ $(function(){
 			turn_uid:data.turn,
 			turn_nickname:data.nickname,
 			turn_master:data.turn_master,
+			turn_master_nickname:data.turn_master_nickname,
 			previous_cards:data.previous_cards,
 			previous_cards_genuine:data.previous_cards_genuine,
 			cards:data.cards,
@@ -877,6 +913,7 @@ $(function(){
 			$('.card-container').fadeOut(1000, function(){ $(this).remove();});
 			$('#taxation_wrapper').fadeOut(1000);
 			$('#taxation_wrapper_background').fadeOut(1000);
+			refresh_room_users(data.leaderboard); //for kick button
 			cards = {};
 			players = [];
 			refresh_card_count();
@@ -910,6 +947,21 @@ $(function(){
 		var given_cards = data.cards;
 		giveCardsFromUserToUser(from_index, to_index, given_cards);
 		console.log(data);
+	});
+
+	socket.on('kick_message', function(data){
+		alert(data.message);
+	});
+
+	socket.on('revolution_complete', function(data){
+		$('#taxation_bottom').fadeOut(1000);
+		$('#taxation_wrapper h3').fadeOut(1000);
+		$('.taxation-card').fadeOut(1000, function(){ $(this).remove();});
+		alert(data.message);
+	});
+
+	socket.on('revolution_fail', function(data){
+		alert(data.message);
 	});
 
 });
@@ -954,6 +1006,12 @@ function start_turn(options)
 		if (current_cards_wrapper)
 			current_cards_wrapper.remove();
 	});
+
+	//refresh turn_master_nickname
+	if (previous_cards.length == 0)
+		$('#room_turn_master').text("");
+	else
+		$('#room_turn_master').text(options.turn_master_nickname);
 
 	//start_turn procedure
 	function start_turn_proc()
@@ -1116,8 +1174,7 @@ function refresh_texation_card_hover()
 		else
 			ele.addClass('selected-taxation-card');
 	});
-}
-
+} 
 function createTaxationCardSet(cards)
 {
 	var room_wrapper = $('#room_wrapper');
@@ -1186,6 +1243,16 @@ function set_taxation_board(status)
 	$('#taxation_wrapper h3').show();
 	$('#taxation_wrapper').fadeIn(1000);
 	$('#taxation_wrapper_background').fadeIn(1000);
+	$('#taxation_revolution_button').hide();
+
+	//revolution button
+	var my_joker_count = 0;
+	for (var i=0;i<cards.my_cards.length;i++){
+		if (cards.my_cards[i] == 13) my_joker_count++;
+	}
+	if (status == 5 && my_joker_count == 2){
+		$('#taxation_revolution_button').show();
+	}
 
 	//Setting explanation expression
 	if (players.length == 4 && status == 1)

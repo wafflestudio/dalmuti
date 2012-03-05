@@ -1,5 +1,5 @@
-console = {};
-console.log = function(m){};
+//console = {};
+//console.log = function(m){};
 
 function getUrlVars()
 {
@@ -90,6 +90,7 @@ function init_dialogs()
 			$('#room_password').val("");
 			create_room_dialog_opened = true;
 			$('#room_is_secret').prop('checked', false).button('refresh').trigger('change');
+			$('#room_allowing_observer').prop('checked', true).button('refresh').trigger('change');
 		},
 		close:function(){
 			$('#room_title').val("");
@@ -204,6 +205,7 @@ function change_viewport(new_viewport)
 		$('#entrance_wrapper input').attr('disabled', 'disabled');
 	}
 	else if (viewport == "lobby" && new_viewport == "room"){
+		$('.room-player-list-container').remove(); //close player contextmenu
 		exact_viewport = "trasition";
 		$('#lobby_wrapper').fadeOut(500, function(){
 			$('#room_wrapper').fadeIn(500, function(){exact_viewport = "room"});
@@ -259,10 +261,17 @@ var create_room_dialog_opened = false;
 var enter_password_dialog_opened = false;
 
 $(function(){
-	$('#wrapper').removeAttr('style');
+	$('#wrapper').removeAttr('style'); //in order to remove 'display:none' style
 	//socket init... show modal view until completed.
 	$('#entrance input:submit').button({});
 	init_dialogs();
+
+	//page leave prevention
+	/*
+	$(window).bind('beforeunload', function(){
+		return "Do you want to quit?";
+	});
+	*/
 
 	//uid init
 	uid = SHA1(String(new Date()) + String(Math.random()));
@@ -301,10 +310,12 @@ $(function(){
 		if(e.which == 17) isCtrl=false;
 	}).keydown(function (e) {
 		if(e.which == 17) isCtrl=true;
+		/*
 		if(e.which == 81 && isCtrl == true && exact_viewport == "room") {
 			$('#room_quit_button').trigger('click');
 			return false;
 		}
+		*/
 		if(e.which == 67 && isCtrl == true && exact_viewport == "lobby") {
 			$('#create_room_button').trigger('click');
 			return false;
