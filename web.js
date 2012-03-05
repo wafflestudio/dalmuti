@@ -153,6 +153,9 @@ function Room(options){
 	this.timer_seconds = 30;
 	this.password = options["password"] || "";
 	this.is_secret = options["is_secret"] || false;
+	this.allowing_observer = options["allowing_observer"] || false;
+	console.log(options);
+	console.log(this);
 
 	//init cards
 	for (var i=1;i<=12;i++){
@@ -217,6 +220,10 @@ function Room(options){
 			for (var i=0;i<80;i++){
 				this.cards[i].uid = this.users[(user_p--) % user_count].uid;
 			}
+			//////////////////for revolution test
+			//this.cards[79].uid = this.users[this.users.length - 1].uid;
+			//this.cards[78].uid = this.users[this.users.length - 1].uid;
+			//////////////////for revolution test
 
 			//Decide state
 			this.state = 1; //Taxation time
@@ -339,6 +346,7 @@ function Room(options){
 				turn:this.users[this.turn].uid,
 				nickname:this.users[this.turn].nickname,
 				turn_master:this.users[this.turn_master].uid,
+				turn_master_nickname:this.users[this.turn_master].nickname,
 				previous_cards:this.previous_show_cards,
 				previous_cards_genuine:this.previous_cards,
 				cards:get_card_list(this.users[i].uid),
@@ -436,8 +444,10 @@ function Room(options){
 					*/
 					var card_count = 0;
 					for (var i=0;i<80;i++){
-						if (this.cards[i].uid == user.uid)
+						if (this.cards[i].uid == user.uid){
 							card_count++;
+							this.cards[i].uid = 0; //added 12.03.05
+						}
 					}
 
 					//reset timer
@@ -483,21 +493,18 @@ function Room(options){
 		}
 		broadcast_room_list();
 		this.broadcastUserInfo();
-		this.broadcastRoomInfoMessage("<" + user.nickname + "> went out.");
+		this.broadcastRoomInfoMessage("<" + user.nickname + "> left.");
 	};
 
 	//Broadcast users info
 	this.broadcastUserInfo = function(){
-		if (this.state == 0){
-			for (var i=0;i<this.users.length;i++){
-				var user = this.users[i];
-				user.socket.emit('room_user_info', this.users.map(function(user){
-					return {
-						uid:user.uid,
-						nickname:user.nickname
-					};
-				}));
-			}
+		for (var i=0;i<this.users.length;i++){
+			this.users[i].socket.emit('room_user_info', this.users.map(function(user){
+				return {
+					uid:user.uid,
+					nickname:user.nickname
+				};
+			}));
 		}
 	};
 	
@@ -520,13 +527,33 @@ function Room(options){
 				message:message
 			});
 		}
-	}
-}
+	};
 
-function state_string(state)
-{
-	if (state == 0) return "Waiting";
-	else return "Playing";
+	this.getProgress = function(){
+		var count = 0;
+		for (var i=0;i<this.cards.length;i++){
+			if (this.cards[i].uid == 0) count++;
+		}
+		return parseInt(count/80*100);
+	};
+
+	this.getStateString = function(){
+		if (this.state == 0) return "Waiting";
+		else return "Playing";
+	};
+
+	this.revolution = function(){
+		this.users.reverse();
+		this.broadcastUserInfo();
+		this.state = 2;
+		this.startGame(false);
+
+		for (var i=0;i<this.users.length;i++){
+			this.users[i].socket.emit('revolution_complete', {
+				message:"Revolution took place!"
+			});
+		}
+	};
 }
 
 //User object
@@ -550,8 +577,9 @@ function User(options){
 				is_secret:room.is_secret,
 				master:(room.master) ? {uid:room.master.uid, nickname:room.master.nickname} : {uid:null, nickname:null}, 
 				users:room.users.map(function(user){return {uid:user.uid, nickname:user.nickname}}),
-				state:state_string(room.state),
+				state:room.getStateString(),
 				capacity:room.capacity,
+				progress:room.getProgress()
 			};
 		}));
 	};
@@ -618,6 +646,11 @@ function User(options){
 	//Send card list
 	this.sendCardList = function(){
 		this.socket.emit('card_list', get_card_list(this.uid));
+	};
+
+	this.kickRoom = function(){
+		this.socket.emit('kick_message', {message:"You got kicked."});
+		this.quitRoom();
 	};
 }
 
@@ -757,6 +790,7 @@ io.sockets.on('connection', function (socket) {
 
 	//CREATE ROOM
 	socket.on('create_room', function(data){
+			console.log(data);
 		var room = new Room({
 			title:data.title,
 			master_uid:data.uid,
@@ -764,6 +798,7 @@ io.sockets.on('connection', function (socket) {
 			is_secret:data.is_secret,
 			password:data.password,
 			uid:data.password,
+			allowing_observer:data.allowing_observer
 		});
 		rooms.push(room);
 		socket.emit('create_room_complete', {rid:room.rid});
@@ -1079,6 +1114,51 @@ io.sockets.on('connection', function (socket) {
 				//giving process end and game start!
 				room.state = 2;
 				room.startGame(false); //no init
+			}
+		}
+	});
+
+	socket.on('get_room_progress', function(data){
+		var room = get_room_by_rid(data.rid);
+		if (room && room.state == 2) {
+			socket.emit('get_room_progress_result', {rid:room.rid, progress:room.getProgress()});
+		}
+	});
+
+	socket.on('kick_user', function(data){
+		var room = get_room_by_rid(data.rid);
+		var my_user = get_user_by_uid(data.uid);
+		var kick_user = get_user_by_uid(data.kick_uid);
+
+		if (room.master.uid == my_user.uid && room.state == 0){ //only master and waiting state
+			//kick user should be in given room
+			var in_room = false;
+			for (var i=0;i<room.users.length;i++){
+				if (room.users[i].uid == kick_user.uid)
+					in_room = true;
+			}
+			if (in_room) kick_user.kickRoom();
+		}
+	});
+
+	socket.on('revolution', function(data){
+		var user = get_user_by_uid(data.uid);
+		if (user){
+			var room = get_room_by_rid(user.where);
+			//compute joker_count
+			var joker_count = 0;
+			for (var i=0;i<room.cards.length;i++){
+				if (room.cards[i].number == 13 && room.cards[i].uid == user.uid)
+					joker_count++;
+			}
+			//in taxation, greater beggar, two jokers
+			//revolution complete
+			if (room && room.state == 1 && room.users[room.users.length-1].uid == user.uid && joker_count == 2){
+				room.revolution();
+			}
+			//revolution fail
+			else {
+				socket.emit('revolution_fail', {message:"Revolution conditions are not satisfied."});
 			}
 		}
 	});
