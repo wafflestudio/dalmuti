@@ -1,5 +1,5 @@
-//console = {};
-//console.log = function(m){};
+console = {};
+console.log = function(m){};
 
 function getUrlVars()
 {
