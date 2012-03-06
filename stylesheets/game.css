@@ -10,6 +10,7 @@ table {border-collapse: collapse;border-spacing: 0;}
 html {background-image:url("/images/darkgray.jpg");}
 #top_wrapper {width:800px;height:640px;margin:auto;margin-top:10px;}
 #wrapper {width:800px;height:600px;margin:auto;background-color:white;}
+#header {height:30px;}
 #footer {height:40px;color:white;font-size:12pt;font-weight:normal;padding:10px;text-align:center;line-height:160%;}
 #footer a:visited {color:#c53535;text-decoration:none;}
 #footer a:link {color:#c53535;text-decoration:none;}
@@ -54,7 +55,7 @@ html {background-image:url("/images/darkgray.jpg");}
 }
 #lobby_top #room_list_table td {padding:5px;border-bottom:1px solid #ddd;font-size:11pt;}
 #lobby_users {border:1px dotted black;width:190px;margin-left:605px;height:400px;}
-#lobby_users h3 {padding:8px;font-size;14pt;background-color:#333;color:white;font-weight:bold;}
+#lobby_users h3 {padding:8px;background-color:#333;color:white;font-weight:bold;}
 #lobby_users #user_list {}
 #user_list ul {font-size:12pt;list-style:circle;padding:5px;}
 #user_list li {margin-bottom:3px;padding:2px;}
@@ -138,7 +139,7 @@ html {background-image:url("/images/darkgray.jpg");}
 #room_top {width:600px;height:120px;position:relative;}
 #room_bottom {width:600px;height:120px;position:relative;top:360px;}
 #room_right {border:1px solid #333;background-color:white;width:200px;height:598px;position:relative;left:600px;}
-#room_right h3 {padding:8px;font-size;14pt;background-color:#333;color:white;font-weight:bold;}
+#room_right h3 {padding:8px;background-color:#333;color:white;font-weight:bold;}
 #room_wrapper .room-user {border:1px solid #333;width:118px;height:118px;float:left;color:white;}
 #room_wrapper .room-user .room-user-kick {float:right;padding:5px;width:12px;font-size:10px;background-color:#a52a2a;text-align:center;color:white;cursor:pointer;}
 #room_wrapper .room-user .room-user-kick:hover {background-color:red;}
@@ -186,9 +187,9 @@ html {background-image:url("/images/darkgray.jpg");}
 
 #room_timer_pcn {background-color:#666;height:50px;padding:8px;font-family:"Arial"}
 #room_timer {float:left;margin-left:10px;}
-#room_timer .timer-text {float:left;30px;background-color:black;color:red;font-weight:bold;font-size:30px;text-align:center;padding:10px;}
+#room_timer .timer-text {float:left;background-color:black;color:red;font-weight:bold;font-size:30px;text-align:center;padding:10px;}
 #room_previous_cards_number {float:left;margin-left:10px;}
-#room_previous_cards_number .pcn-text {float:left;30px;background-color:black;color:#00ff00;font-weight:bold;font-size:30px;text-align:center;padding:10px;}
+#room_previous_cards_number .pcn-text {float:left;background-color:black;color:#00ff00;font-weight:bold;font-size:30px;text-align:center;padding:10px;}
 #room_turn_master {text-align:center;background-color:#666;height:20px;padding:10px;font-size:12pt;color:yellow;}
 
 .comment-div {font-size:16pt;position:relative;z-index:10001;text-align:center;color:#ffff00;}

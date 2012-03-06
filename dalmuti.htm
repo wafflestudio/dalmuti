@@ -58,7 +58,18 @@
 
 	</head> 
 	<body onload="javascript:preloader()"> 
+		<div id="fb-root"></div>
+		<script>(function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) return;
+			js = d.createElement(s); js.id = id;
+			js.src = "//connect.facebook.net/ko_KR/all.js#xfbml=1";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));</script>
 		<div id="top_wrapper">
+			<div id="header">
+				<div class="fb-like" data-href="http://www.dalmutionline.com" data-send="true" data-width="800" data-show-faces="false" data-colorscheme="dark"></div>
+			</div>
 			<div id="wrapper" style="display:none;"> 
 				<div id="entrance_wrapper">
 					<div id="entrance">
@@ -309,6 +320,245 @@
 					</div>
 				</div>
 				<!-- ROOM WRAPPER END -->
+				<!-- ETC START -->
+				<div id="modal_loading">
+					<img src="/images/loading.gif" alt="loading" />
+					<div class="loading-text">Loading...</div>
+				</div>
+
+				<div id="modal_error">
+					<div class="error-message-div">
+						Error : <span class="error-message"></span><br />
+					</div>
+					<a href=".">Reconnect</a>
+				</div>
+
+				<div id="modal_alert">
+					<div class="alert-message">
+						This is for test
+					</div>
+				</div>
+
+				<div id="dialog_create_room">
+					<form id="create_room_form" accept-charset="UTF-8" action="#create_room" method="post">
+						<table id="create_room_table">
+							<tr>
+								<th>Secret</th>
+								<td><input class="input-check" id="room_is_secret" name="is_secret" type="checkbox" /><label for="room_is_secret">Secret</label></td>
+							</tr>
+							<!--
+							<tr>
+								<th>Observer</th>
+								<td><input class="input-check" id="room_allowing_observer" name="allowing_observer" type="checkbox" checked="checked" /><label for="room_allowing_observer">Allow</label></td>
+							</tr>
+							-->
+							<tr>
+								<th>Title</th>
+								<td><input class="input-text" id="room_title" name="title" type="text" placeholder="Enter a title" /></td>
+							</tr>
+							<tr id="create_room_password_row">
+								<th>Password</th>
+								<td><input class="input-text" id="room_password" name="password" type="password" placeholder="Enter a password" /></td>
+							</tr>
+							<tr>
+								<th>&nbsp;</th>
+								<td>
+									<input name="commit" type="submit" value="Create" /> 
+									<input id="create_room_cancel_button" type="button" value="Cancel" /> 
+								</td>
+							</tr>
+						</table>
+					</form> 
+				</div>
+
+				<div id="dialog_enter_password">
+					<form id="enter_password_form" accept-charset="UTF-8" action="#enter_password" method="post">
+						<table id="enter_password_table">
+							<tr>
+								<th>Password</th>
+								<td><input class="input-text" id="enter_password" name="password" type="password" placeholder="Enter a password" /></td>
+							</tr>
+							<tr>
+								<th><input id="enter_password_rid" name="rid" type="hidden" /></th>
+								<td>
+									<input name="commit" type="submit" value="Enter" /> 
+									<input id="enter_password_cancel_button" type="button" value="Cancel" /> 
+								</td>
+							</tr>
+						</table>
+					</form> 
+				</div>
+
+				<div id="modal_leaderboard">
+					<table id="leaderboard_table">
+						<thead>
+							<tr>
+								<th class="leaderboard-ranking">Ranking</th>
+								<th class="leaderboard-nickname">Nickname</th>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+
+				<div id="modal_howtoplay">
+					<div id="howtoplay_1" class="howtoplay">
+						<h3>1. Cards</h3>
+						<div class="howtoplay-cards">
+							<div class="howtoplay-card-container"><img src="/images/card_1.jpg" class="howtoplay-card" alt="card-1" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_2.jpg" class="howtoplay-card" alt="card-2" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_2.jpg" class="howtoplay-card" alt="card-2" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_3.jpg" class="howtoplay-card" alt="card-3" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_3.jpg" class="howtoplay-card" alt="card-3" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_3.jpg" class="howtoplay-card" alt="card-3" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_4.jpg" class="howtoplay-card" alt="card-4" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_4.jpg" class="howtoplay-card" alt="card-4" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_4.jpg" class="howtoplay-card" alt="card-4" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_4.jpg" class="howtoplay-card" alt="card-4" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_5.jpg" class="howtoplay-card" alt="card-5" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_5.jpg" class="howtoplay-card" alt="card-5" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_5.jpg" class="howtoplay-card" alt="card-5" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_5.jpg" class="howtoplay-card" alt="card-5" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_5.jpg" class="howtoplay-card" alt="card-5" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_6.jpg" class="howtoplay-card" alt="card-6" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_6.jpg" class="howtoplay-card" alt="card-6" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_6.jpg" class="howtoplay-card" alt="card-6" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_6.jpg" class="howtoplay-card" alt="card-6" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_6.jpg" class="howtoplay-card" alt="card-6" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_6.jpg" class="howtoplay-card" alt="card-6" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_7.jpg" class="howtoplay-card" alt="card-7" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_7.jpg" class="howtoplay-card" alt="card-7" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_7.jpg" class="howtoplay-card" alt="card-7" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_7.jpg" class="howtoplay-card" alt="card-7" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_7.jpg" class="howtoplay-card" alt="card-7" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_7.jpg" class="howtoplay-card" alt="card-7" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_7.jpg" class="howtoplay-card" alt="card-7" /></div>
+							<div class="clear"></div>
+							<div class="howtoplay-card-container"><img src="/images/card_8.jpg" class="howtoplay-card" alt="card-8" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_8.jpg" class="howtoplay-card" alt="card-8" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_8.jpg" class="howtoplay-card" alt="card-8" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_8.jpg" class="howtoplay-card" alt="card-8" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_8.jpg" class="howtoplay-card" alt="card-8" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_8.jpg" class="howtoplay-card" alt="card-8" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_8.jpg" class="howtoplay-card" alt="card-8" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_8.jpg" class="howtoplay-card" alt="card-8" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_9.jpg" class="howtoplay-card" alt="card-9" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_9.jpg" class="howtoplay-card" alt="card-9" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_9.jpg" class="howtoplay-card" alt="card-9" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_9.jpg" class="howtoplay-card" alt="card-9" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_9.jpg" class="howtoplay-card" alt="card-9" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_9.jpg" class="howtoplay-card" alt="card-9" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_9.jpg" class="howtoplay-card" alt="card-9" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_9.jpg" class="howtoplay-card" alt="card-9" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_9.jpg" class="howtoplay-card" alt="card-9" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
+							<div class="clear"></div>
+							<div class="howtoplay-card-container"><img src="/images/card_11.jpg" class="howtoplay-card" alt="card-11" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_11.jpg" class="howtoplay-card" alt="card-11" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_11.jpg" class="howtoplay-card" alt="card-11" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_11.jpg" class="howtoplay-card" alt="card-11" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_11.jpg" class="howtoplay-card" alt="card-11" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_11.jpg" class="howtoplay-card" alt="card-11" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_11.jpg" class="howtoplay-card" alt="card-11" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_11.jpg" class="howtoplay-card" alt="card-11" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_11.jpg" class="howtoplay-card" alt="card-11" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_11.jpg" class="howtoplay-card" alt="card-11" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_11.jpg" class="howtoplay-card" alt="card-11" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_13.jpg" class="howtoplay-card" alt="card-13" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_13.jpg" class="howtoplay-card" alt="card-13" /></div>
+							<div class="clear"></div>
+						</div>
+						<p>
+						There is a number of each rank of cards (1 through 12) equal to that rank, so twelve 12s, eleven 11s, and so on. There are also two Jokers, which are wild cards.
+						</p>
+						<p>
+						There are 80 cards in total.
+						</p>
+					</div>
+					<div id="howtoplay_2" class="howtoplay">
+						<h3>2. Rules</h3>
+						<div class="howtoplay-cards2">
+							<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
+							<div class="howtoplay-card-blank"></div>
+							<div class="howtoplay-card-blank"></div>
+							<div class="howtoplay-card-blank"></div>
+							<div class="howtoplay-card-container"><table style="height:90px;"><tr><td style="vertical-align:middle;font-size:30pt;">&gt;</td></tr></table></div>
+							<div class="howtoplay-card-blank"></div>
+							<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
+							<div class="howtoplay-card-blank"></div>
+							<div class="howtoplay-card-blank"></div>
+							<div class="howtoplay-card-blank"></div>
+							<div class="howtoplay-card-container"><table style="height:90px;"><tr><td style="vertical-align:middle;font-size:30pt;">&gt;</td></tr></table></div>
+							<div class="howtoplay-card-blank"></div>
+							<div class="howtoplay-card-container"><img src="/images/card_7.jpg" class="howtoplay-card" alt="card-7" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_7.jpg" class="howtoplay-card" alt="card-7" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_7.jpg" class="howtoplay-card" alt="card-7" /></div>
+							<div class="howtoplay-card-blank"></div>
+							<div class="howtoplay-card-blank"></div>
+							<div class="howtoplay-card-blank"></div>
+							<div class="howtoplay-card-container"><table style="height:90px;"><tr><td style="vertical-align:middle;font-size:30pt;">&gt;</td></tr></table></div>
+							<div class="howtoplay-card-blank"></div>
+							<div class="howtoplay-card-container"><img src="/images/card_4.jpg" class="howtoplay-card" alt="card-4" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_4.jpg" class="howtoplay-card" alt="card-4" /></div>
+							<div class="howtoplay-card-container"><img src="/images/card_13.jpg" class="howtoplay-card" alt="card-13" /></div>
+							<div class="clear"></div>
+						</div>
+						<p>
+						The rule is simple. For example, if a first player submitted three 12s cards, following players should submit three cards smaller than previous one. If a first player paid two cards, others also should pay two cards smaller than former one. In other words, you can put only cards that are same number as previous cards and have less rank than given ones. <span style="color:red">(Jokers are special. They play wildcard role <u>only when given with different cards</u>. However, Jokers have rank 13 when they are alone.)</span>
+						</p>
+						<p>
+						If you don't have cards satisfying above rules or don't want to put them now, you can just pass that turn.
+						</p>
+					</div>
+					<div id="howtoplay_3" class="howtoplay">
+						<h3>3. Taxation</h3>
+						<p>
+						The rank of players is also important. There are several classes in this game.
+						</p>
+						<ul>
+							<li>The Greater Dalmuti</li>
+							<li>The Lesser Dalmuti</li>
+							<li>The Commoner</li>
+							<li>The Lesser Beggar</li>
+							<li>The Greater Beggar</li>
+						</ul>
+						<p>
+						In this situation, beggars should pay their best cards to dalmuties as tax. Dalmuties also give their worst cards to beggars. They exchange their cards each other before starting game.
+						</p>
+						<p>
+						Does it seem unfair? Yes, but that is the previlege of The King and The Nobility, and that is the rule.
+						</p>
+						<p style="font-weight:bold;font-size:16pt;text-align:center;color:#ffd700;">
+						Be The King! :-)
+						</p>
+					</div>
+				</div>
+				<!-- ETC END -->
 
 			</div> 
 
@@ -320,248 +570,12 @@
 				<p>
 					<a href="mailto:secury@wafflestudio.com">secury@wafflestudio.com</a>
 				</p>
-			</div>
-		</div>
-
-		<!-- ETC START -->
-		<div id="modal_loading">
-			<img src="/images/loading.gif" alt="loading" />
-			<div class="loading-text">Loading...</div>
-		</div>
-
-		<div id="modal_error">
-			<div class="error-message-div">
-				Error : <span class="error-message"></span><br />
-			</div>
-			<a href=".">Reconnect</a>
-		</div>
-
-		<div id="modal_alert">
-			<div class="alert-message">
-				This is for test
-			</div>
-		</div>
-
-		<div id="dialog_create_room">
-			<form id="create_room_form" accept-charset="UTF-8" action="#create_room" method="post">
-				<table id="create_room_table">
-					<tr>
-						<th>Secret</th>
-						<td><input class="input-check" id="room_is_secret" name="is_secret" type="checkbox" /><label for="room_is_secret">Secret</label></td>
-					</tr>
-					<!--
-					<tr>
-						<th>Observer</th>
-						<td><input class="input-check" id="room_allowing_observer" name="allowing_observer" type="checkbox" checked="checked" /><label for="room_allowing_observer">Allow</label></td>
-					</tr>
-					-->
-					<tr>
-						<th>Title</th>
-						<td><input class="input-text" id="room_title" name="title" type="text" placeholder="Enter a title" /></td>
-					</tr>
-					<tr id="create_room_password_row">
-						<th>Password</th>
-						<td><input class="input-text" id="room_password" name="password" type="password" placeholder="Enter a password" /></td>
-					</tr>
-					<tr>
-						<th>&nbsp;</th>
-						<td>
-							<input name="commit" type="submit" value="Create" /> 
-							<input id="create_room_cancel_button" type="button" value="Cancel" /> 
-						</td>
-					</tr>
-				</table>
-			</form> 
-		</div>
-
-		<div id="dialog_enter_password">
-			<form id="enter_password_form" accept-charset="UTF-8" action="#enter_password" method="post">
-				<table id="enter_password_table">
-					<tr>
-						<th>Password</th>
-						<td><input class="input-text" id="enter_password" name="password" type="password" placeholder="Enter a password" /></td>
-					</tr>
-					<tr>
-						<th><input id="enter_password_rid" name="rid" type="hidden" /></th>
-						<td>
-							<input name="commit" type="submit" value="Enter" /> 
-							<input id="enter_password_cancel_button" type="button" value="Cancel" /> 
-						</td>
-					</tr>
-				</table>
-			</form> 
-		</div>
-
-		<div id="modal_leaderboard">
-			<table id="leaderboard_table">
-				<thead>
-					<tr>
-						<th class="leaderboard-ranking">Ranking</th>
-						<th class="leaderboard-nickname">Nickname</th>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>
-		</div>
-
-		<div id="modal_howtoplay">
-			<div id="howtoplay_1" class="howtoplay">
-				<h3>1. Cards</h3>
-				<div class="howtoplay-cards">
-					<div class="howtoplay-card-container"><img src="/images/card_1.jpg" class="howtoplay-card" alt="card-1" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_2.jpg" class="howtoplay-card" alt="card-2" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_2.jpg" class="howtoplay-card" alt="card-2" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_3.jpg" class="howtoplay-card" alt="card-3" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_3.jpg" class="howtoplay-card" alt="card-3" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_3.jpg" class="howtoplay-card" alt="card-3" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_4.jpg" class="howtoplay-card" alt="card-4" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_4.jpg" class="howtoplay-card" alt="card-4" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_4.jpg" class="howtoplay-card" alt="card-4" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_4.jpg" class="howtoplay-card" alt="card-4" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_5.jpg" class="howtoplay-card" alt="card-5" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_5.jpg" class="howtoplay-card" alt="card-5" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_5.jpg" class="howtoplay-card" alt="card-5" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_5.jpg" class="howtoplay-card" alt="card-5" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_5.jpg" class="howtoplay-card" alt="card-5" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_6.jpg" class="howtoplay-card" alt="card-6" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_6.jpg" class="howtoplay-card" alt="card-6" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_6.jpg" class="howtoplay-card" alt="card-6" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_6.jpg" class="howtoplay-card" alt="card-6" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_6.jpg" class="howtoplay-card" alt="card-6" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_6.jpg" class="howtoplay-card" alt="card-6" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_7.jpg" class="howtoplay-card" alt="card-7" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_7.jpg" class="howtoplay-card" alt="card-7" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_7.jpg" class="howtoplay-card" alt="card-7" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_7.jpg" class="howtoplay-card" alt="card-7" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_7.jpg" class="howtoplay-card" alt="card-7" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_7.jpg" class="howtoplay-card" alt="card-7" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_7.jpg" class="howtoplay-card" alt="card-7" /></div>
-					<div class="clear"></div>
-					<div class="howtoplay-card-container"><img src="/images/card_8.jpg" class="howtoplay-card" alt="card-8" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_8.jpg" class="howtoplay-card" alt="card-8" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_8.jpg" class="howtoplay-card" alt="card-8" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_8.jpg" class="howtoplay-card" alt="card-8" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_8.jpg" class="howtoplay-card" alt="card-8" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_8.jpg" class="howtoplay-card" alt="card-8" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_8.jpg" class="howtoplay-card" alt="card-8" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_8.jpg" class="howtoplay-card" alt="card-8" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_9.jpg" class="howtoplay-card" alt="card-9" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_9.jpg" class="howtoplay-card" alt="card-9" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_9.jpg" class="howtoplay-card" alt="card-9" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_9.jpg" class="howtoplay-card" alt="card-9" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_9.jpg" class="howtoplay-card" alt="card-9" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_9.jpg" class="howtoplay-card" alt="card-9" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_9.jpg" class="howtoplay-card" alt="card-9" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_9.jpg" class="howtoplay-card" alt="card-9" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_9.jpg" class="howtoplay-card" alt="card-9" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
-					<div class="clear"></div>
-					<div class="howtoplay-card-container"><img src="/images/card_11.jpg" class="howtoplay-card" alt="card-11" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_11.jpg" class="howtoplay-card" alt="card-11" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_11.jpg" class="howtoplay-card" alt="card-11" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_11.jpg" class="howtoplay-card" alt="card-11" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_11.jpg" class="howtoplay-card" alt="card-11" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_11.jpg" class="howtoplay-card" alt="card-11" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_11.jpg" class="howtoplay-card" alt="card-11" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_11.jpg" class="howtoplay-card" alt="card-11" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_11.jpg" class="howtoplay-card" alt="card-11" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_11.jpg" class="howtoplay-card" alt="card-11" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_11.jpg" class="howtoplay-card" alt="card-11" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_13.jpg" class="howtoplay-card" alt="card-13" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_13.jpg" class="howtoplay-card" alt="card-13" /></div>
-					<div class="clear"></div>
-				</div>
-				<p>
-				There is a number of each rank of cards (1 through 12) equal to that rank, so twelve 12s, eleven 11s, and so on. There are also two Jokers, which are wild cards.
-				</p>
-				<p>
-				There are 80 cards in total.
-				</p>
-			</div>
-			<div id="howtoplay_2" class="howtoplay">
-				<h3>2. Rules</h3>
-				<div class="howtoplay-cards2">
-					<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_12.jpg" class="howtoplay-card" alt="card-12" /></div>
-					<div class="howtoplay-card-blank"></div>
-					<div class="howtoplay-card-blank"></div>
-					<div class="howtoplay-card-blank"></div>
-					<div class="howtoplay-card-container"><table style="height:90px;"><tr><td style="vertical-align:middle;font-size:30pt;">&gt;</td></tr></table></div>
-					<div class="howtoplay-card-blank"></div>
-					<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_10.jpg" class="howtoplay-card" alt="card-10" /></div>
-					<div class="howtoplay-card-blank"></div>
-					<div class="howtoplay-card-blank"></div>
-					<div class="howtoplay-card-blank"></div>
-					<div class="howtoplay-card-container"><table style="height:90px;"><tr><td style="vertical-align:middle;font-size:30pt;">&gt;</td></tr></table></div>
-					<div class="howtoplay-card-blank"></div>
-					<div class="howtoplay-card-container"><img src="/images/card_7.jpg" class="howtoplay-card" alt="card-7" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_7.jpg" class="howtoplay-card" alt="card-7" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_7.jpg" class="howtoplay-card" alt="card-7" /></div>
-					<div class="howtoplay-card-blank"></div>
-					<div class="howtoplay-card-blank"></div>
-					<div class="howtoplay-card-blank"></div>
-					<div class="howtoplay-card-container"><table style="height:90px;"><tr><td style="vertical-align:middle;font-size:30pt;">&gt;</td></tr></table></div>
-					<div class="howtoplay-card-blank"></div>
-					<div class="howtoplay-card-container"><img src="/images/card_4.jpg" class="howtoplay-card" alt="card-4" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_4.jpg" class="howtoplay-card" alt="card-4" /></div>
-					<div class="howtoplay-card-container"><img src="/images/card_13.jpg" class="howtoplay-card" alt="card-13" /></div>
-					<div class="clear"></div>
-				</div>
-				<p>
-				The rule is simple. For example, if a first player submitted three 12s cards, following players should submit three cards smaller than previous one. If a first player paid two cards, others also should pay two cards smaller than former one. In other words, you can put only cards that are same number as previous cards and have less rank than given ones. <span style="color:red">(Jokers are special. They play wildcard role <u>only when given with different cards</u>. However, Jokers have rank 13 when they are alone.)</span>
-				</p>
-				<p>
-				If you don't have cards satisfying above rules or don't want to put them now, you can just pass that turn.
-				</p>
-			</div>
-			<div id="howtoplay_3" class="howtoplay">
-				<h3>3. Taxation</h3>
-				<p>
-				The rank of players is also important. There are several classes in this game.
-				</p>
-				<ul>
-					<li>The Greater Dalmuti</li>
-					<li>The Lesser Dalmuti</li>
-					<li>The Commoner</li>
-					<li>The Lesser Beggar</li>
-					<li>The Greater Beggar</li>
-				</ul>
-				<p>
-				In this situation, beggars should pay their best cards to dalmuties as tax. Dalmuties also give their worst cards to beggars. They exchange their cards each other before starting game.
-				</p>
-				<p>
-				Does it seem unfair? Yes, but that is the previlege of The King and The Nobility, and that is the rule.
-				</p>
-				<p style="font-weight:bold;font-size:16pt;text-align:center;color:#ffd700;">
-				Be The King! :-)
+				<p style="font-size:9pt;padding:5px;">
+				Last updated on 12.03.05
 				</p>
 			</div>
 		</div>
-		<!-- ETC END -->
+
 
 		<ul id="myMenu" class="contextMenu">
 			<!--
