@@ -150,6 +150,7 @@ function refresh_room_users(users)
 
 function show_leaderboard(user_arr)
 {
+	play_effect('leaderboard');
 	var tbody = $('#leaderboard_table tbody');
 	tbody.children().remove();
 	for (var i=0;i<user_arr.length;i++){
@@ -164,7 +165,6 @@ function show_leaderboard(user_arr)
 	}
 
 	modal_leaderboard.dialog('open');
-	play_effect('leaderboard');
 }
 
 //create and return jqeury object, with {number, width, height, className}
@@ -774,11 +774,13 @@ $(function(){
 		my_card_set = createMyCardSet().appendTo($('#room_mycards')).hide();
 		$('#room_table').fadeIn(1000);
 		$('#room_mycards_wrapper').fadeIn(1000); //game start
+		$('#card_selection_buttons input').attr('disabled', 'disabled').hide();
 
 		//GAME START after taxation
 		if (!data.init && data.state == 2)
 			start_game(data);
 		else {
+			play_bgm('playing_game'); //play bgm
 			play_effect('startgame');
 			//distribute cards
 			var tmp_card = createCard({number:0, width:120, height:180}).appendToCardTable().hide().fadeIn(1000, function (){
@@ -973,6 +975,11 @@ $(function(){
 //functions related with proceeding game...
 function start_turn(options)
 {
+	//bomb sound! (when current and previous cards are different)
+	var bomb_sound = false;
+	if (options.previous_cards.length != 0 && options.previous_cards.join("") != previous_cards.join(""))
+		bomb_sound = true;
+
 	room_timer_seconds = options.timer_seconds;
 
 	console.log(options.turn_nickname + ':TURN');
@@ -1020,6 +1027,7 @@ function start_turn(options)
 	//start_turn procedure
 	function start_turn_proc()
 	{
+		if (bomb_sound) play_effect('card');
 		//if preivous turn was me, adjust cards
 		if (prev_turn_uid == uid && previous_cards_genuine.length > 0){
 			for (var i=0;i<current_cards.length;i++)
@@ -1237,7 +1245,6 @@ function start_game(data)
 			timer_seconds:data.timer_seconds
 		});
 	});
-	play_bgm('playing_game'); //play bgm
 }
 
 function set_taxation_board(status)

@@ -1,5 +1,5 @@
-//console = {};
-//console.log = function(m){};
+console = {};
+console.log = function(m){};
 
 function getUrlVars()
 {
@@ -38,6 +38,7 @@ function show_error_message(message)
 	$('#modal_error .error-message').text(message);
 	modal_error.dialog('open');
 	socket.disconnect();
+	play_bgm("");
 }
 
 function init_dialogs()
@@ -301,22 +302,24 @@ function init_effect()
 	effect_leaderboard = [];
 	effect_myturn = [];
 	effect_startgame = [];
-	for (var i=0;i<10;i++){
+	for (var i=0;i<5;i++){
 		var card = new buzz.sound("/sounds/effect_card", {formats:["mp3", "ogg"], preload:true});
-		card.bind('ended', function(e){ this.stop();});
+		card.setVolume(100);
+		card.bind('ended', function(e){ this.sound.currentTime=0; this.stop(); });
 		effect_card.push(card);
 	}
 	for (var i=0;i<3;i++){
 		var myturn = new buzz.sound("/sounds/effect_myturn", {formats:["mp3", "ogg"], preload:true});
-		myturn.bind('ended', function(e){ this.stop();});
+		myturn.bind('ended', function(e){ this.sound.currentTime=0;this.stop(); });
 		effect_myturn.push(myturn);
+
+		var leaderboard = new buzz.sound("/sounds/effect_leaderboard", {formats:["mp3", "ogg"], preload:true});
+		var startgame = new buzz.sound("/sounds/effect_startgame", {formats:["mp3", "ogg"], preload:true});
+		leaderboard.bind('ended', function(e){ this.sound.currentTime=0; this.stop();});
+		startgame.bind('ended', function(e){ this.sound.currentTime=0; this.stop();});
+		effect_leaderboard.push(leaderboard);
+		effect_startgame.push(startgame);
 	}
-	var leaderboard = new buzz.sound("/sounds/effect_leaderboard", {formats:["mp3", "ogg"], preload:true});
-	var startgame = new buzz.sound("/sounds/effect_startgame", {formats:["mp3", "ogg"], preload:true});
-	leaderboard.bind('ended', function(e){ this.stop();});
-	startgame.bind('ended', function(e){ this.stop();});
-	effect_leaderboard.push(leaderboard);
-	effect_startgame.push(startgame);
 }
 
 function bgm_mute()
@@ -412,7 +415,7 @@ function play_effect(name)
 $(function(){
 	init_bgm();
 	init_effect();
-	bgm_lobby.fadeIn(BGM_FADETIME); //turn on the bgm
+	play_bgm('lobby');
 
 	$('#wrapper').removeAttr('style'); //in order to remove 'display:none' style
 	//socket init... show modal view until completed.
@@ -474,25 +477,35 @@ $(function(){
 	$(document).keyup(function (e) {
 		if(e.which == 17) isCtrl=false;
 	}).keydown(function (e) {
-		if (e.which == 118){ //f7
+		if(e.which == 17) isCtrl=true;
+		//ESC
+		if (e.which == 27){
+			return false;
+		}
+		//F7
+		if (e.which == 118){
 			var bgm_check = $('#sound_bgm_checkbox');
 			bgm_check.prop('checked', !bgm_check.prop('checked')).trigger('change');
+			return false;
 		}
+		//F8
 		if (e.which == 119){
 			var effect_check = $('#sound_effect_checkbox');
 			effect_check.prop('checked', !effect_check.prop('checked')).trigger('change');
+			return false;
 		}
-		if(e.which == 17) isCtrl=true;
 		/*
 		if(e.which == 81 && isCtrl == true && exact_viewport == "room") {
 			$('#room_quit_button').trigger('click');
 			return false;
 		}
 		*/
+		//Ctrl + C
 		if(e.which == 67 && isCtrl == true && exact_viewport == "lobby") {
 			$('#create_room_button').trigger('click');
 			return false;
 		}
+		//Ctrl + S
 		if(e.which == 83 && isCtrl == true && exact_viewport == "room") {
 			$('#game_start_button').trigger('click');
 			return false;
