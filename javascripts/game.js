@@ -369,16 +369,25 @@ function play_bgm(name)
 		if (!bgm_playing_game.isPaused()) bgm_playing_game.fadeOut(BGM_FADETIME, function(){ bgm_playing_game.stop();bgm_lobby.fadeIn(BGM_FADETIME);});
 		else if (!bgm_waiting_game.isPaused()) bgm_waiting_game.fadeOut(BGM_FADETIME, function(){ bgm_waiting_game.stop();bgm_lobby.fadeIn(BGM_FADETIME);});
 		else if (bgm_lobby.isPaused()) bgm_lobby.fadeIn(BGM_FADETIME);
+
+		if (!bgm_playing_game.isPaused()) bgm_playing_game.fadeOut(BGM_FADETIME, function(){ bgm_playing_game.stop();});
+		if (!bgm_waiting_game.isPaused()) bgm_waiting_game.fadeOut(BGM_FADETIME, function(){ bgm_waiting_game.stop();});
 	}
 	else if (name == "waiting_game"){
 		if (!bgm_playing_game.isPaused()) bgm_playing_game.fadeOut(BGM_FADETIME, function(){ bgm_playing_game.stop();bgm_waiting_game.fadeIn(BGM_FADETIME); });
 		else if (!bgm_lobby.isPaused()) bgm_lobby.fadeOut(BGM_FADETIME, function(){ bgm_lobby.stop();bgm_waiting_game.fadeIn(BGM_FADETIME); });
 		else if (bgm_waiting_game.isPaused()) bgm_waiting_game.fadeIn(BGM_FADETIME);
+
+		if (!bgm_lobby.isPaused()) bgm_lobby.fadeOut(BGM_FADETIME, function(){ bgm_lobby.stop();});
+		if (!bgm_playing_game.isPaused()) bgm_playing_game.fadeOut(BGM_FADETIME, function(){ bgm_playing_game.stop();});
 	}
 	else if (name == "playing_game"){
 		if (!bgm_waiting_game.isPaused()) bgm_waiting_game.fadeOut(BGM_FADETIME, function(){ bgm_waiting_game.stop();bgm_playing_game.fadeIn(BGM_FADETIME); });
 		else if (!bgm_lobby.isPaused()) bgm_lobby.fadeOut(BGM_FADETIME, function(){ bgm_lobby.stop();bgm_playing_game.fadeIn(BGM_FADETIME); });
 		else if (bgm_playing_game.isPaused()) bgm_playing_game.fadeIn(BGM_FADETIME);
+
+		if (!bgm_lobby.isPaused()) bgm_lobby.fadeOut(BGM_FADETIME, function(){ bgm_lobby.stop();});
+		if (!bgm_waiting_game.isPaused()) bgm_waiting_game.fadeOut(BGM_FADETIME, function(){ bgm_waiting_game.stop();});
 	}
 	else {
 		if (!bgm_playing_game.isPaused()) bgm_playing_game.fadeOut(BGM_FADETIME, function(){ bgm_playing_game.stop(); });
