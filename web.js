@@ -102,8 +102,44 @@ function handler (req, res) { //http server handler
 				res.writeHead(200);
 				return res.end("ERROR");
 			}
-			res.writeHead(200, {'Content-Type' : mime.lookup(filename)});
-			res.end(data);
+			//write header
+			var filestat = fs.statSync(filename);
+			var filemime = mime.lookup(filename);
+			if (filemime == "audio/mpeg" || filemime == "audio/ogg"){
+				var range = req.headers.range || ("bytes=0-" + (data.length-1));
+				var total = data.length; 
+				var parts = range.replace(/bytes=/, "").split("-"); 
+				var partial_start = parts[0]; 
+				var partial_end = parts[1]; 
+
+				var start_index = parseInt(partial_start); 
+				var end_index = (partial_end ? parseInt(partial_end) : total-1);
+				var chunksize = (end_index - start_index) + 1;
+				console.log(req.headers);
+				console.log(filename);
+
+				var header = {
+					"Accept-Ranges": "bytes", 
+					"Content-Range": "bytes " + start_index + "-" + end_index + "/" + total, 
+					"Content-Length": chunksize,
+
+					'Content-Type' : filemime,
+					'Transfer-Encoding' : "chunked",
+					//'Content-Length' : filestat.size
+				};
+				console.log(header);
+				console.log("-------------------");
+
+				res.writeHead(206, header);
+				res.end(data.slice(start_index, end_index+1));
+			}
+			else {
+				res.writeHead(200, {
+					'Content-Type' : filemime,
+					'Content-Length' : filestat.size
+				});
+				res.end(data);
+			}
 		});
 	}
 }

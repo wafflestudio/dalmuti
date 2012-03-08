@@ -1,5 +1,5 @@
-console = {};
-console.log = function(m){};
+//console = {};
+//console.log = function(m){};
 
 function getUrlVars()
 {
@@ -218,6 +218,7 @@ function change_viewport(new_viewport)
 
 		$('#create_room_form input').attr('disabled', 'disabled');
 		$('#lobby_wrapper input').attr('disabled', 'disabled');
+		play_bgm('waiting_game');
 	}
 	else if (viewport == "room" && new_viewport == "lobby"){
 		exact_viewport = "trasition";
@@ -233,6 +234,7 @@ function change_viewport(new_viewport)
 		$('#lobby_chat_message_list .overview div.lobby-chat').remove();
 
 		$('#lobby_wrapper input').removeAttr('disabled');
+		play_bgm('lobby');
 	}
 	else {
 		show_error_message("Denied access");
@@ -260,7 +262,158 @@ var connecting_users_count;
 var create_room_dialog_opened = false;
 var enter_password_dialog_opened = false;
 
+var bgm_lobby;
+var bgm_playing_game;
+var bgm_waiting_game;
+var BGM_FADETIME = 1000;
+var effect_card;
+var effect_leaderboard;
+var effect_myturn;
+var effect_startgame;
+var bgm_switch = true;
+var effect_switch = true;
+
+function init_bgm()
+{
+	bgm_lobby = new buzz.sound("/sounds/bgm_lobby", {
+		preload:true,
+		loop:true,
+		formats:["mp3", "ogg"]
+	});
+	bgm_playing_game = new buzz.sound("/sounds/bgm_playing_game", {
+		preload:true,
+		loop:true,
+		formats:["mp3", "ogg"]
+	});
+	bgm_waiting_game = new buzz.sound("/sounds/bgm_waiting_game", {
+		preload:true,
+		loop:true,
+		formats:["mp3", "ogg"]
+	});
+	bgm_lobby.load().setVolume(0);
+	bgm_waiting_game.load().setVolume(0);
+	bgm_playing_game.load().setVolume(0);
+}
+
+function init_effect()
+{
+	effect_card = [];
+	effect_leaderboard = [];
+	effect_myturn = [];
+	effect_startgame = [];
+	for (var i=0;i<10;i++){
+		var card = new buzz.sound("/sounds/effect_card", {formats:["mp3", "ogg"], preload:true});
+		card.bind('ended', function(e){ this.stop();});
+		effect_card.push(card);
+	}
+	for (var i=0;i<3;i++){
+		var myturn = new buzz.sound("/sounds/effect_myturn", {formats:["mp3", "ogg"], preload:true});
+		myturn.bind('ended', function(e){ this.stop();});
+		effect_myturn.push(myturn);
+	}
+	var leaderboard = new buzz.sound("/sounds/effect_leaderboard", {formats:["mp3", "ogg"], preload:true});
+	var startgame = new buzz.sound("/sounds/effect_startgame", {formats:["mp3", "ogg"], preload:true});
+	leaderboard.bind('ended', function(e){ this.stop();});
+	startgame.bind('ended', function(e){ this.stop();});
+	effect_leaderboard.push(leaderboard);
+	effect_startgame.push(startgame);
+}
+
+function bgm_mute()
+{
+	bgm_lobby.mute();
+	bgm_waiting_game.mute();
+	bgm_playing_game.mute();
+}
+
+function bgm_unmute()
+{
+	bgm_lobby.unmute();
+	bgm_waiting_game.unmute();
+	bgm_playing_game.unmute();
+}
+
+function effect_mute()
+{
+	function proc(arr)
+	{
+		for (var i=0;i<arr.length;i++){
+			arr[i].mute();
+		}
+	}
+	proc(effect_card);
+	proc(effect_leaderboard);
+	proc(effect_myturn);
+	proc(effect_startgame);
+}
+
+function effect_unmute()
+{
+	function proc(arr)
+	{
+		for (var i=0;i<arr.length;i++)
+			arr[i].unmute();
+	}
+	proc(effect_card);
+	proc(effect_leaderboard);
+	proc(effect_myturn);
+	proc(effect_startgame);
+}
+
+function play_bgm(name)
+{
+	if (name == "lobby"){
+		if (!bgm_playing_game.isPaused()) bgm_playing_game.fadeOut(BGM_FADETIME, function(){ bgm_playing_game.stop();bgm_lobby.fadeIn(BGM_FADETIME);});
+		else if (!bgm_waiting_game.isPaused()) bgm_waiting_game.fadeOut(BGM_FADETIME, function(){ bgm_waiting_game.stop();bgm_lobby.fadeIn(BGM_FADETIME);});
+		else if (bgm_lobby.isPaused()) bgm_lobby.fadeIn(BGM_FADETIME);
+	}
+	else if (name == "waiting_game"){
+		if (!bgm_playing_game.isPaused()) bgm_playing_game.fadeOut(BGM_FADETIME, function(){ bgm_playing_game.stop();bgm_waiting_game.fadeIn(BGM_FADETIME); });
+		else if (!bgm_lobby.isPaused()) bgm_lobby.fadeOut(BGM_FADETIME, function(){ bgm_lobby.stop();bgm_waiting_game.fadeIn(BGM_FADETIME); });
+		else if (bgm_waiting_game.isPaused()) bgm_waiting_game.fadeIn(BGM_FADETIME);
+	}
+	else if (name == "playing_game"){
+		if (!bgm_waiting_game.isPaused()) bgm_waiting_game.fadeOut(BGM_FADETIME, function(){ bgm_waiting_game.stop();bgm_playing_game.fadeIn(BGM_FADETIME); });
+		else if (!bgm_lobby.isPaused()) bgm_lobby.fadeOut(BGM_FADETIME, function(){ bgm_lobby.stop();bgm_playing_game.fadeIn(BGM_FADETIME); });
+		else if (bgm_playing_game.isPaused()) bgm_playing_game.fadeIn(BGM_FADETIME);
+	}
+	else {
+		if (!bgm_playing_game.isPaused()) bgm_playing_game.fadeOut(BGM_FADETIME, function(){ bgm_playing_game.stop(); });
+		if (!bgm_waiting_game.isPaused()) bgm_waiting_game.fadeOut(BGM_FADETIME, function(){ bgm_waiting_game.stop(); });
+		if (!bgm_lobby.isPaused()) bgm_lobby.fadeOut(BGM_FADETIME, function(){ bgm_lobby.stop(); });
+	}
+}
+
+function play_effect(name)
+{
+	function proc(arr)
+	{
+		for (var i=0;i<arr.length;i++){
+			if (arr[i].isPaused() && !arr[i].isMuted()){
+				arr[i].play();
+				break;
+			}
+		}
+	}
+	if (name == "card"){
+		proc(effect_card);
+	}
+	else if (name == "leaderboard"){
+		proc(effect_leaderboard);
+	}
+	else if (name == "myturn"){
+		proc(effect_myturn);
+	}
+	else if (name == "startgame"){
+		proc(effect_startgame);
+	}
+}
+
 $(function(){
+	init_bgm();
+	init_effect();
+	bgm_lobby.fadeIn(BGM_FADETIME); //turn on the bgm
+
 	$('#wrapper').removeAttr('style'); //in order to remove 'display:none' style
 	//socket init... show modal view until completed.
 	$('#entrance input:submit').button({});
@@ -283,6 +436,18 @@ $(function(){
 	$('#room_wrapper').hide();
 	$('#howtoplay_2').hide();
 	$('#howtoplay_3').hide();
+
+	//bgm, effect on/off
+	$('#sound_bgm_checkbox').change(function(){
+		var check = $(this).prop('checked');
+		if (check) bgm_unmute();
+		else bgm_mute();
+	});
+	$('#sound_effect_checkbox').change(function(){
+		var check = $(this).prop('checked');
+		if (check) effect_unmute();
+		else effect_mute();
+	});
 
 	//keydown -> chat text
 	$('*').keydown(function(event){
@@ -309,6 +474,14 @@ $(function(){
 	$(document).keyup(function (e) {
 		if(e.which == 17) isCtrl=false;
 	}).keydown(function (e) {
+		if (e.which == 118){ //f7
+			var bgm_check = $('#sound_bgm_checkbox');
+			bgm_check.prop('checked', !bgm_check.prop('checked')).trigger('change');
+		}
+		if (e.which == 119){
+			var effect_check = $('#sound_effect_checkbox');
+			effect_check.prop('checked', !effect_check.prop('checked')).trigger('change');
+		}
 		if(e.which == 17) isCtrl=true;
 		/*
 		if(e.which == 81 && isCtrl == true && exact_viewport == "room") {

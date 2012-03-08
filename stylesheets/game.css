@@ -11,6 +11,8 @@ html {background-image:url("/images/darkgray.jpg");}
 #top_wrapper {width:800px;height:640px;margin:auto;margin-top:10px;}
 #wrapper {width:800px;height:600px;margin:auto;background-color:white;}
 #header {height:30px;}
+#header .fb-like {float:left;}
+#header #sound_control {float:right;color:white;}
 #footer {height:40px;color:white;font-size:12pt;font-weight:normal;padding:10px;text-align:center;line-height:160%;}
 #footer a:visited {color:#c53535;text-decoration:none;}
 #footer a:link {color:#c53535;text-decoration:none;}

@@ -164,6 +164,7 @@ function show_leaderboard(user_arr)
 	}
 
 	modal_leaderboard.dialog('open');
+	play_effect('leaderboard');
 }
 
 //create and return jqeury object, with {number, width, height, className}
@@ -778,6 +779,7 @@ $(function(){
 		if (!data.init && data.state == 2)
 			start_game(data);
 		else {
+			play_effect('startgame');
 			//distribute cards
 			var tmp_card = createCard({number:0, width:120, height:180}).appendToCardTable().hide().fadeIn(1000, function (){
 				var distribution_arr = [];
@@ -924,6 +926,8 @@ $(function(){
 			if (my_card_set)
 				my_card_set.remove();
 		}, 1500);
+
+		play_bgm('waiting_game');
 	});
 	
 	socket.on('submit_taxation_fail', function(data){
@@ -1069,6 +1073,7 @@ function start_turn(options)
 
 function my_turn()
 {
+	play_effect('myturn');
 	console.log("Your turn!");
 	current_cards = [];
 	refresh_card_container_hover();
@@ -1232,6 +1237,7 @@ function start_game(data)
 			timer_seconds:data.timer_seconds
 		});
 	});
+	play_bgm('playing_game'); //play bgm
 }
 
 function set_taxation_board(status)
