@@ -115,8 +115,8 @@ function handler (req, res) { //http server handler
 				var start_index = parseInt(partial_start); 
 				var end_index = (partial_end ? parseInt(partial_end) : total-1);
 				var chunksize = (end_index - start_index) + 1;
-				console.log(req.headers);
-				console.log(filename);
+				//console.log(req.headers);
+				//console.log(filename);
 
 				var header = {
 					"Accept-Ranges": "bytes", 
@@ -127,8 +127,8 @@ function handler (req, res) { //http server handler
 					'Transfer-Encoding' : "chunked",
 					//'Content-Length' : filestat.size
 				};
-				console.log(header);
-				console.log("-------------------");
+				//console.log(header);
+				//console.log("-------------------");
 
 				res.writeHead(206, header);
 				res.end(data.slice(start_index, end_index+1));
@@ -190,8 +190,8 @@ function Room(options){
 	this.password = options["password"] || "";
 	this.is_secret = options["is_secret"] || false;
 	this.allowing_observer = options["allowing_observer"] || false;
-	console.log(options);
-	console.log(this);
+	//console.log(options);
+	//console.log(this);
 
 	//init cards
 	for (var i=1;i<=12;i++){
@@ -333,7 +333,7 @@ function Room(options){
 		}, this.timer_seconds * 1000);
 
 		var current_turn_master = this.turn_master;
-		console.log('CHANGE TURN');
+		//console.log('CHANGE TURN');
 
 		//change turn_master if prev turn master ends the game..
 		if (this.users[this.turn_master].ranking != 100 && cards.length == 0){
@@ -344,7 +344,7 @@ function Room(options){
 		}
 
 		//is there any users newly ended?
-		console.log('RANKING');
+		//console.log('RANKING');
 		for (var i=0;i<this.users.length;i++){
 			var user = this.users[i];
 			var end = true;
@@ -401,7 +401,7 @@ function Room(options){
 				if (this.users.length == 0)
 					rooms.remove(this);
 
-				console.log('USER QUIT FROM ROOM');
+				//console.log('USER QUIT FROM ROOM');
 			}
 		}
 		//Taxation time
@@ -412,7 +412,7 @@ function Room(options){
 				if (this.users.length == 0)
 					rooms.remove(this);
 
-				console.log('USER QUIT FROM ROOM - taxation time');
+				//console.log('USER QUIT FROM ROOM - taxation time');
 			}
 			this.endGame();
 		}
@@ -513,7 +513,7 @@ function Room(options){
 							timer_seconds:this.timer_seconds,
 						});
 					}
-					console.log('===QUIT ROOM(DISTRIBUTE CARDS)');
+					//console.log('===QUIT ROOM(DISTRIBUTE CARDS)');
 
 					//is game ended?
 					var playing_user_count = 0;
