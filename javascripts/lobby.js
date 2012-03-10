@@ -32,7 +32,8 @@ function refresh_room_list(rooms)
 		//get room progress
 		state_td.hover(function(){
 			//mouseenter
-			socket.emit('get_room_progress', {rid:room.rid});
+			var rid = $(this).parent().find('.room-enter-button').attr('alt');
+			socket.emit('get_room_progress', {rid:rid});
 		},function(){
 			//mouseleave
 			$('.room-state-text').show();
@@ -43,9 +44,9 @@ function refresh_room_list(rooms)
 	new_tbody.appendTo($('#room_list_table'));
 
 	//show/hide player_list
-	$('td.room-enter').unbind('mouseenter').mouseenter(function(){
+	$('.room-enter-button').unbind('mouseenter').mouseenter(function(){
 		//mouseenter
-		var ele = $(this);
+		var ele = $(this).parent();
 		var contextmenu_absolute = $('<div></div>').addClass('absolute').addClass('room-player-list-container').appendTo($('#wrapper'));
 		var contextmenu = $('<div></div>').addClass('room-player-list').appendTo(contextmenu_absolute).css('top', ele.position().top + $('#room_list').position().top + 7);
 		$('<h3></h3>').text("Players").appendTo(contextmenu);

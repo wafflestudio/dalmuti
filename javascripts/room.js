@@ -719,6 +719,7 @@ $(function(){
 	//enter room complete
 	socket.on('enter_room_complete', function(data){
 		$('#room_wrapper input').removeAttr('disabled');
+		$('.room-player-list-container').remove(); //remove room-player-list
 		//initialize room
 		where = data.rid;
 		room_state = 0;
