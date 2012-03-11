@@ -210,3 +210,6 @@ html {background-image:url("/images/darkgray.jpg");}
 
 .room-player-list {position:relative;left:570px;background-color:#eee;border:1px solid #ddd;width:100px;padding:10px;line-height:120%;font-size:10pt;}
 .room-player-list h3 {font-weight:bold;}
+
+#admin_message {position:absolute;margin-left:130px;padding-left:5px;width:475px;z-index:100;background-color:#222;height:24px;font-size:16px;color:yellow;overflow:hidden;}
+#admin_message_text {position:relative;line-height:150%;}

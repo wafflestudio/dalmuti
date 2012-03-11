@@ -427,6 +427,8 @@ $(function(){
 	play_bgm('lobby');
 
 	$('#wrapper').removeAttr('style'); //in order to remove 'display:none' style
+	$('#admin_message').hide();
+	admin_message_up();
 	//socket init... show modal view until completed.
 	$('#entrance input:submit').button({});
 	init_dialogs();
@@ -543,4 +545,38 @@ $(function(){
 		show_error_message(data.message);
 		console.log('socket on error');
 	});
+	socket.on('set_admin_message', function(data){
+		var admin_div = $('#admin_message')
+		var admin_message_text = $('#admin_message_text');
+		if (data.message.trim() == "")
+			admin_div.hide();
+		else{
+			admin_div.show();
+			admin_message_text.css('top', 0).html(data.message);
+			//admin_message_up();
+		}
+	});
 });
+
+function admin_message_up()
+{
+	var admin_message_text = $('#admin_message_text');
+	var lines = parseInt(admin_message_text.height() / 24);
+	var delay = (lines * 1000) || 1000;
+	admin_message_text.stop(true, true).animate({top:0}, delay, admin_message_down);
+}
+
+function admin_message_down()
+{
+	var admin_message_text = $('#admin_message_text');
+	var lines = parseInt(admin_message_text.height() / 24);
+	var delay = (lines * 1000) || 1000;
+	admin_message_text.stop(true, true).animate({top:-24*(lines-1)}, delay, admin_message_up);
+}
+
+var admin_password;
+function admin_message(message)
+{
+	if (!message) message = "";
+	socket.emit('admin_message', {message:message, password:SHA1(String(admin_password))});
+}

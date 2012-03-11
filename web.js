@@ -684,15 +684,22 @@ function User(options){
 		this.socket.emit('card_list', get_card_list(this.uid));
 	};
 
+	//Kick 
 	this.kickRoom = function(){
 		this.socket.emit('kick_message', {message:"You got kicked."});
 		this.quitRoom();
+	};
+
+	//sendAdminMessage
+	this.sendAdminMessage = function(message){
+		this.socket.emit('set_admin_message', {message:String(message)});
 	};
 }
 
 var users = [];
 var rooms = [];
 var room_cnt = 1;
+var admin_message_text = "";
 function broadcast_connecting_users()
 {
 	console.log("BROADCAST CONNECTING USERS");
@@ -797,6 +804,13 @@ function get_card_list(uid)
 	return null;
 }
 
+function broadcast_admin_message(message)
+{
+	for (var i=0;i<users.length;i++){
+		users[i].sendAdminMessage(message);
+	}
+}
+
 io.sockets.on('connection', function (socket) {
 	socket.emit('init_client', {count: users.length });
 
@@ -817,6 +831,7 @@ io.sockets.on('connection', function (socket) {
 
 			//Send room_list to user that is connected now
 			user.sendRoomList();
+			user.sendAdminMessage(admin_message_text);
 		}
 		else {
 			console.log('error : duplicated connection');
@@ -1196,6 +1211,13 @@ io.sockets.on('connection', function (socket) {
 			else {
 				socket.emit('revolution_fail', {message:"Revolution conditions are not satisfied."});
 			}
+		}
+	});
+
+	socket.on('admin_message', function(data){
+		if (data.password == '7fdc01d1d955314de221c773934148ee9eca6dfd'){
+			admin_message_text = data.message;
+			broadcast_admin_message(data.message);
 		}
 	});
 });
