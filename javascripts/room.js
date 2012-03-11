@@ -610,6 +610,7 @@ var room_timer;
 $(function(){
 	$('#room_wrapper input:button').button();
 	$("#room_wrapper input:submit").button();
+	$('#autopass_checkbox').button();
 	$('#room_chat_message_list').tinyscrollbar();
 
 	//quit room button click
@@ -974,8 +975,10 @@ $(function(){
 });
 
 //functions related with proceeding game...
+var start_turn_flag = false; //prevent duplicated execution
 function start_turn(options)
 {
+	start_turn_flag = false;
 	//bomb sound! (when current and previous cards are different)
 	var bomb_sound = false;
 	if (options.previous_cards.length != 0 && options.previous_cards.join("") != previous_cards.join(""))
@@ -1082,6 +1085,38 @@ function start_turn(options)
 
 function my_turn()
 {
+	if (start_turn_flag) return;
+	start_turn_flag = true;
+	//if there is no cards to submit, pass
+	
+	var autopass = $('#autopass_checkbox').prop('checked');
+	if (autopass && previous_cards.length > 0){
+		var nocard = true;
+		var my_cards = cards.my_cards;
+		//check there are cards that can be submitted
+		for (var i=0;i<=my_cards.length - previous_cards.length;i++){
+			var same = true;
+			for (var j=i+1;j<i+previous_cards.length - get_joker_count();j++){
+				if (my_cards[i] != my_cards[j]){
+					same = false;
+					break;
+				}
+			}
+			if (same && parseInt(my_cards[i]) < parseInt(previous_cards[0]))
+				nocard = false;
+		}
+		if (nocard){
+			//pass!
+			current_cards = [];
+			socket.emit('submit_card', {
+				uid:uid,	
+				rid:where,
+				cards:current_cards
+			});
+			return;
+		}
+	}
+
 	play_effect('myturn');
 	console.log("Your turn!");
 	current_cards = [];
@@ -1091,6 +1126,9 @@ function my_turn()
 
 function wait_turn()
 {
+	if (start_turn_flag) return;
+	start_turn_flag = true;
+
 	console.log("Other's turn!");
 	cancel_card_container_hover();
 	$('#card_selection_buttons input').attr('disabled', 'disabled').fadeOut(500);
@@ -1248,6 +1286,16 @@ function start_game(data)
 	});
 }
 
+function get_joker_count()
+{
+	var my_joker_count = 0;
+	for (var i=0;i<cards.my_cards.length;i++){
+		if (cards.my_cards[i] == 13) my_joker_count++;
+	}
+
+	return my_joker_count;
+}
+
 function set_taxation_board(status)
 {
 	//TAXATION TIME!
@@ -1260,11 +1308,7 @@ function set_taxation_board(status)
 	$('#taxation_revolution_button').hide();
 
 	//revolution button
-	var my_joker_count = 0;
-	for (var i=0;i<cards.my_cards.length;i++){
-		if (cards.my_cards[i] == 13) my_joker_count++;
-	}
-	if (status == 5 && my_joker_count == 2){
+	if (status == 5 && get_joker_count() == 2){
 		$('#taxation_revolution_button').show();
 	}
 
