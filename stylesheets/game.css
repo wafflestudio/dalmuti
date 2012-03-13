@@ -214,3 +214,5 @@ html {background-image:url("/images/darkgray.jpg");}
 
 #admin_message {position:absolute;margin-left:130px;padding-left:5px;width:475px;z-index:100;background-color:#222;height:24px;font-size:16px;color:yellow;overflow:hidden;}
 #admin_message_text {position:relative;line-height:150%;}
+#admin_message a:visited {color:white;}
+#admin_message a:link {color:white;}
