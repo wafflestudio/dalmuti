@@ -219,7 +219,10 @@ function change_viewport(new_viewport)
 
 		$('#create_room_form input').attr('disabled', 'disabled');
 		$('#lobby_wrapper input').attr('disabled', 'disabled');
-		play_bgm('waiting_game');
+		if (room_state == 2)
+			play_bgm('playing_game');
+		else
+			play_bgm('waiting_game');
 	}
 	else if (viewport == "room" && new_viewport == "lobby"){
 		exact_viewport = "trasition";

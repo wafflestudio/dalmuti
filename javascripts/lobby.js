@@ -1,12 +1,26 @@
 function refresh_room_list(rooms)
 {
+	//sort by state
+	function cmp_room(room1, room2)
+	{
+		if (room1.state_number == room2.state_number) return -1;
+		return room1.state_number - room2.state_number;
+	}
 	console.log(rooms);
+	rooms.sort(cmp_room);
 	var new_tbody = $('<tbody></tbody>');
 	for(var i=0;i<rooms.length;i++){
 		var new_tr = $('<tr></tr>').appendTo(new_tbody);
 		var room = rooms[i];
 		var players = room.users.map(function(x){return x.nickname}).join(',');
-		console.log(room.users);
+
+		//tr color
+		if (room.state_number == 0) 
+			new_tr.addClass('waiting');
+		else if (room.state_number == 1)
+				new_tr.addClass('playing-yellow');
+		else if (room.state_number == 2)
+			new_tr.addClass('playing-red');
 		
 		$('<td></td>').addClass('room-no').appendTo(new_tr).text(room.number);
 		var title_td = $('<td></td>').addClass('room-title').appendTo(new_tr).text(room.title);

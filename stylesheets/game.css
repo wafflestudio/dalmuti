@@ -40,6 +40,9 @@ html {background-image:url("/images/darkgray.jpg");}
 #lobby_top #lobby_rooms {border:1px dotted black;width:600px;height:400px;float:left;overflow:hidden;}
 #lobby_top #room_buttons {width:100%;height:50px;}
 #lobby_top #room_list {height:350px;}
+#lobby_top #room_list tr.waiting {background-color:#dfd;}
+#lobby_top #room_list tr.playing-yellow {background-color:#ffd;}
+#lobby_top #room_list tr.playing-red {background-color:#fdd;}
 #lobby_top #room_list .ui-widget {font-size:12pt !important;}
 #lobby_top #room_list_table {width:575px;margin-left:5px;}
 #lobby_top #room_list_table .room-no{width:40px;text-align:center;}

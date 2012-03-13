@@ -269,6 +269,7 @@ function Room(options){
 			this.turn = 0;
 			this.turn_master = 0;
 			this.previous_cards = [];
+			this.previous_show_cards = [];
 		}
 
 		if (this.state == 2){
@@ -311,9 +312,14 @@ function Room(options){
 		this.users.sort(function(a, b){
 			return a.ranking - b.ranking;
 		});
+		var leaderboard_users = [];
+		for (var i=0;i<this.users.length;i++){
+			if (this.users[i].ranking != 200)
+				leaderboard_users.push(this.users[i]);
+		}
 		for (var i=0;i<this.users.length;i++){
 			this.users[i].socket.emit('end_game', {
-				leaderboard:this.users.map(function(user){ return {uid:user.uid, nickname:user.nickname}; })
+				leaderboard:leaderboard_users.map(function(user){ return {uid:user.uid, nickname:user.nickname}; })
 			});
 		}
 		this.state = 0;
@@ -441,43 +447,7 @@ function Room(options){
 				//room remove!
 				if (this.users.length == 0)
 					rooms.remove(this);
-				else {
-					/*
-					//Distribute cards which this user has
-					this.cards.shuffle();
-					var distribution_result = {}; //{uid:[cards]}
-					var user_count = this.users.length;
-					var user_p = user_count*800 - 1;
-					var card_count = 0;
-					var each_user_card_count = {};
-					//init each_user_card_count
-					for (var i=0;i<this.users.length;i++)
-						each_user_card_count[this.users[i].uid] = 0;
-					//
-					for (var i=0;i<80;i++){
-						if (this.cards[i].uid == user.uid){
-							if (!distribution_result[this.users[(user_p) % user_count].uid]) //if null
-								distribution_result[this.users[(user_p) % user_count].uid] = [];
-							distribution_result[this.users[(user_p) % user_count].uid].push(this.cards[i].number);
-							this.cards[i].uid = this.users[(user_p--) % user_count].uid;
-
-							each_user_card_count[this.cards[i].uid]++;
-							card_count++;
-						}
-					}
-
-					function process_distribution_result(distribution_result, uid)
-					{
-						var result = {my_cards:[], other_cards:{}}; //other_cards = array of {uid:number}
-						for (dis_uid in distribution_result){
-							if (dis_uid == uid)
-								result.my_cards = distribution_result[dis_uid].sort(sortASC);
-							else
-								result.other_cards[dis_uid] = distribution_result[dis_uid].length;
-						}
-						return result;
-					}
-					*/
+				else if (user.ranking != 200){
 					var card_count = 0;
 					for (var i=0;i<80;i++){
 						if (this.cards[i].uid == user.uid){
@@ -498,8 +468,6 @@ function Room(options){
 						this.users[i].socket.emit('game_quit_user', {
 							uid:user.uid, 
 							card_count:card_count, 
-							//distribution_result:process_distribution_result(distribution_result, this.users[i].uid), 
-							//each_user_card_count:each_user_card_count,
 							turn:this.users[this.turn].uid,
 							nickname:this.users[this.turn].nickname,
 							turn_master:this.users[this.turn_master].uid,
@@ -532,15 +500,33 @@ function Room(options){
 		this.broadcastRoomInfoMessage("<" + user.nickname + "> left.");
 	};
 
+	this.getPlayers = function()
+	{
+			var players = [];
+			for (var i=0;i<this.users.length;i++){
+				if (this.users[i].ranking != 200)
+					players.push(this.users[i]);
+			}
+			return players;
+	}
+
 	//Broadcast users info
 	this.broadcastUserInfo = function(){
 		for (var i=0;i<this.users.length;i++){
-			this.users[i].socket.emit('room_user_info', this.users.map(function(user){
-				return {
-					uid:user.uid,
-					nickname:user.nickname
-				};
-			}));
+			this.users[i].socket.emit('room_user_info', {
+				users: this.users.map(function(user){
+					return {
+						uid:user.uid,
+						nickname:user.nickname
+					};
+				}),
+				players: this.getPlayers().map(function(user){
+					return {
+						uid:user.uid,
+						nickname:user.nickname
+					};
+				})
+			});
 		}
 	};
 	
@@ -576,6 +562,15 @@ function Room(options){
 	this.getStateString = function(){
 		if (this.state == 0) return "Waiting";
 		else return "Playing";
+	};
+
+	this.getStateNumber = function(){
+		if (this.users.length >= this.capacity || (!this.allowing_observer && this.state != 0))
+			return 2; //red
+		else if (this.state == 0) 
+			return 0; //green
+		else 
+			return 1; //yellow
 	};
 
 	this.revolution = function(){
@@ -614,8 +609,10 @@ function User(options){
 				master:(room.master) ? {uid:room.master.uid, nickname:room.master.nickname} : {uid:null, nickname:null}, 
 				users:room.users.map(function(user){return {uid:user.uid, nickname:user.nickname}}),
 				state:room.getStateString(),
+				state_number:room.getStateNumber(),
 				capacity:room.capacity,
-				progress:room.getProgress()
+				progress:room.getProgress(),
+				allowing_observer:room.allowing_observer
 			};
 		}));
 	};
@@ -640,7 +637,7 @@ function User(options){
 			this.socket.emit('enter_room_fail', {message:"There is no such room"});
 			console.log('ENTER ROOM FAIL - 1');
 		}
-		else if (room.state != 0){
+		else if (!room.allowing_observer && room.state != 0){
 			this.socket.emit('enter_room_fail', {message:"The room is already started"});
 			console.log('ENTER ROOM FAIL - 2');
 		}
@@ -653,14 +650,24 @@ function User(options){
 			console.log('ENTER ROOM FAIL - 3');
 		}
 		else {
+			if (room.state != 0)
+				this.ranking = 200; //observer ranking
+
+			var leaderboard_users = [];
+			for (var i=0;i<room.users.length;i++){
+				if (room.users[i].ranking != 200)
+					leaderboard_users.push(room.users[i]);
+			}
+
 			room.enterUser(this);
 			this.where = room.rid;
 			this.socket.emit('enter_room_complete', {
 				rid: room.rid, 
 				number: room.number, 
+				state: room.state,
 				title: room.title, 
 				master:(room.master) ? {uid:room.master.uid, nickname:room.master.nickname} : {uid:null, nickname:null}, 
-				users: room.users.map(function(user){return {uid:user.uid, nickname:user.nickname}})
+				users: leaderboard_users.map(function(user){return {uid:user.uid, nickname:user.nickname}})
 			});
 		}
 		broadcast_lobby_user_list();
@@ -865,12 +872,14 @@ io.sockets.on('connection', function (socket) {
 
 		if (!user)
 			socket.emit('error', {message:'Disconnected'});
-		else if (room.master && room.master.uid != user.uid && room.is_secret && room.password != data.password){
-			user.socket.emit('enter_room_fail', {message:"Password is incorrect"});
-			console.log('ENTER ROOM FAIL - PW');
+		else if (room){
+			if (room.master && room.master.uid != user.uid && room.is_secret && room.password != data.password){
+				user.socket.emit('enter_room_fail', {message:"Password is incorrect"});
+				console.log('ENTER ROOM FAIL - PW');
+			}
+			else
+				user.enterRoom(room);
 		}
-		else
-			user.enterRoom(room);
 		console.log('===ENTER ROOM END');
 	});
 
@@ -924,10 +933,10 @@ io.sockets.on('connection', function (socket) {
 	socket.on('submit_card', function(data){
 		var user = get_user_by_uid(data.uid);
 		var room = get_room_by_rid(data.rid);
-		var room_cards = room.cards;
 		var cards = data.cards.clone();
 
 		if (user && room && room.state == 2){
+			var room_cards = room.cards;
 			var tmp_uid = utils.SHA1(String(new Date()) + String(Math.random()));
 			var is_all_same = true;
 			var is_owned = true; 
@@ -1181,7 +1190,7 @@ io.sockets.on('connection', function (socket) {
 		var my_user = get_user_by_uid(data.uid);
 		var kick_user = get_user_by_uid(data.kick_uid);
 
-		if (room.master.uid == my_user.uid && room.state == 0){ //only master and waiting state
+		if (room && my_user && kick_user && my_user.uid != kick_user.uid && room.master.uid == my_user.uid && room.state == 0){ //only master and waiting state
 			//kick user should be in given room
 			var in_room = false;
 			for (var i=0;i<room.users.length;i++){

@@ -14,7 +14,7 @@ function refresh_room_users(users)
 			ele.children('.room-nickname').text(users[i].nickname);
 			ele.children('.room-cards').text("");
 			ele.children('.room-user-uid').text(users[i].uid);
-			if (users[0].uid == uid && uid != users[i].uid && room_state == 0)
+			if (users[0].uid == uid && users[i].uid != uid && room_state == 0)
 				ele.children('.room-user-kick').show();
 			//ele.enableContextMenu(); //context menu
 		}
@@ -390,8 +390,9 @@ function get_card_count_by_uid(g_uid)
 {
 	//it returns the number of cards that user(found by uid) has
 	for (var i=0;i<players.length;i++){
-		if (players[i].uid == g_uid && g_uid == uid) //my cards
+		if (players[i].uid == g_uid && g_uid == uid){ //my cards
 			return cards.my_cards.length;
+		}
 		else if (players[i].uid == g_uid){ //other cards
 			for (o_uid in cards.other_cards){
 				if (o_uid == g_uid)
@@ -510,6 +511,10 @@ function refresh_card_container_hover()
 
 	//select card ok button
 	$('#select_card_ok_button').click(function(){
+		if (current_cards.length == 0){
+			alert("Select at least one card.");
+			return false;
+		}
 		socket.emit('submit_card', {
 			uid:uid,	
 			rid:where,
@@ -723,7 +728,7 @@ $(function(){
 		$('.room-player-list-container').remove(); //remove room-player-list
 		//initialize room
 		where = data.rid;
-		room_state = 0;
+		room_state = data.state;
 		dialog_enter_password.dialog('close');
 		$('.current-turn').removeAttr('style').removeClass('current-turn');
 		$('#room_mycards_wrapper').hide();
@@ -740,26 +745,33 @@ $(function(){
 		room_timer_seconds = 0;
 		refresh_room_timer_seconds(); //init timer
 		$('#room_turn_master').text(""); //init turn_master_nickname
+		refresh_card_count("blank");
 
 		cards = {};
-		players = [];
+		players = data.users; //modified 12.03.13 origin : players = [];
 		previous_cards = [];
 		current_cards = [];
 		refresh_previous_cards_number();
+
+		//observer table
+		if (room_state == 2){
+			$('#room_table').show();
+			$('#room_mycards_wrapper').show();
+		}
 
 		if (my_card_set)
 			my_card_set.remove();
 		change_viewport('room');
 
-		console.log('enter room complete');
-		console.log(data);
 	});
 
 	//room user info
 	socket.on('room_user_info', function(data){
-		console.log('room_user_info');
-		console.log(data);
-		refresh_room_users(data);
+		players = data.players;
+		refresh_room_users(data.users);
+		if (room_state == 2){ //entering observer
+			refresh_card_count();
+		}
 	});
 
 	//game start complete
@@ -768,9 +780,6 @@ $(function(){
 		cards = data.cards; //refresh cards info
 		room_state = data.state; //change state
 		$('.room-user-kick').hide(); //hide user-kick
-
-		console.log("START GAME COMPLETE");
-		console.log(data);
 
 		if (my_card_set) my_card_set.remove();
 		my_card_set = createMyCardSet().appendTo($('#room_mycards')).hide();
@@ -814,8 +823,6 @@ $(function(){
 
 	//game quit user
 	socket.on('game_quit_user', function(data){
-		console.log('GAME QUIT USER');
-		console.log(data);
 		refresh_card_count("blank");
 		//stop!!
 		cancel_card_container_hover();
@@ -839,43 +846,6 @@ $(function(){
 			previous_cards_genuine:data.previous_cards,
 			timer_seconds:data.timer_seconds
 		});
-		/*
-		var tmp_card = createCard({number:0, width:120, height:180}).appendToCardTable().hide().fadeIn(1000, function (){
-			collectCard(get_user_index_by_uid(data.uid), 0, data.card_count, function(){
-				var distribution_arr = [];
-				for (each_uid in data.each_user_card_count){
-					distribution_arr.push({index:get_user_index_by_uid(each_uid), count:data.each_user_card_count[each_uid]});
-				}
-
-				giveUsersCard(distribution_arr, function(){
-					setTimeout(function(){
-						cards = data.cards; //update cards
-						players = data.users;
-						refresh_room_users(players);
-						refresh_card_count();
-						//card distribution end
-						//add cards to my cardset
-						for (var i=0;i<data.distribution_result.my_cards.length;i++){
-							add_card_to_card_set(data.distribution_result.my_cards[i]);
-						}
-						adjustMyCardSet();
-						start_turn({
-							turn_uid:data.turn,
-							turn_nickname:data.nickname,
-							turn_master:data.turn_master,
-							previous_cards:data.previous_cards,
-							previous_cards_genuine:data.previous_cards,
-							timer_seconds:data.timer_seconds
-						});
-
-					}, 1000);
-					tmp_card.fadeOut(1000, function(){ tmp_card.remove();});
-				});
-
-			});
-		});
-		*/
-		//
 	});
 
 	socket.on('submit_card_fail', function(data){
@@ -903,13 +873,12 @@ $(function(){
 		clearInterval(room_timer);
 		room_timer_seconds = 0;
 		refresh_room_timer_seconds();
+		room_state = 0;
 
-		console.log('end game');
 		show_leaderboard(data.leaderboard);
 		setTimeout(function(){
 			$('#room_wrapper input').removeAttr('disabled');
 			//initialize room
-			room_state = 0;
 			$('.current-turn').removeAttr('style').removeClass('current-turn');
 			$('#room_mycards_wrapper').fadeOut(1000);
 			$('#room_table').fadeOut(1000);
@@ -919,7 +888,7 @@ $(function(){
 			$('.card-container').fadeOut(1000, function(){ $(this).remove();});
 			$('#taxation_wrapper').fadeOut(1000);
 			$('#taxation_wrapper_background').fadeOut(1000);
-			refresh_room_users(data.leaderboard); //for kick button
+			//refresh_room_users(data.leaderboard); //for kick button
 			cards = {};
 			players = [];
 			refresh_card_count();
@@ -945,8 +914,6 @@ $(function(){
 		$('#taxation_wrapper h3').fadeOut(1000);
 		$('.taxation-card').fadeOut(1000, function(){ $(this).remove();});
 
-		console.log('submit_taxation_complete');
-		console.log(data);
 	});
 
 	socket.on('give_cards', function(data){
@@ -954,7 +921,6 @@ $(function(){
 		var to_index = get_user_index_by_uid(data.to_uid);
 		var given_cards = data.cards;
 		giveCardsFromUserToUser(from_index, to_index, given_cards);
-		console.log(data);
 	});
 
 	socket.on('kick_message', function(data){
